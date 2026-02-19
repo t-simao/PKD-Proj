@@ -1,9 +1,7 @@
-import { type List, append, list } from './list';
+import { type List, pair, list } from './list';
 import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable} from './hashtables'
 
 // Data type definitions
-
-
 type Pathway_type = "hallway" | "elevator" | "ramp" | "stair";
 
 const Pathway_const: Record<Pathway_type, number> = {
@@ -39,90 +37,90 @@ type Edge = {
  * @invariant Every target node id is a non-negative number less than size.
  * @invariant None of the target node ids appears twice in the same list.
  */
-export type ListGraph_withWeights = {
-    Places: ProbingHashtable<string, Node>,
-    nodes: Array<string>
+export type Map = {
+    places: ProbingHashtable<string, Node>,
+    nodeNames: Array<string>
     adj: Array<List<Edge>>, // Lists may not be sorted
     size: number
 };
 
 /**
- * Maken an empty graph which satisfies the ListGraph_withWeights type
- * @returns a graph which satisfies the ListGraph_withWeights type
+ * Maken an empty graph which satisfies the Map type
+ * @returns a graph which satisfies the Map type
  */
-export function make_map(): ListGraph_withWeights{
-
+export function make_map(): Map{
     return {
-        Places: ph_empty<string, Node>(1, hash_id),
-        nodes: [],
+        places: ph_empty<string, Node>(1, hash_id),
+        nodeNames: [],
         adj: [],
         size: 0
     };
 }
 
-export function add_place(map: ListGraph_withWeights, name: string, flo: number): void {
+function make_node(name: string, floor: number, idx: number): Node {
+    return {
+        id: idx,
+        name: name,
+        floor: floor
+    };
+}
 
-    if(ph_lookup(map.Places, name) !== undefined) {
+export function add_place(map: Map, name: string, floor: number): void {
+    if(ph_lookup(map.places, name) !== undefined) {
 
-        console.log("Place already exists!!"); 
+        console.log(`${name} already exist, no need to add!!`)
         return;
     }
-
-    const key = name;
+    
     const idx = map.size;
-
-    const place: Node = {id: idx, name: name, floor: flo};
-    ph_insert(map.Places, key, place);
+    const key = name;
+    const node = make_node(name, floor, idx);
+    
+    ph_insert(map.places, key, node);
 
     map.adj.push(list());
-    map.nodes.push(name);
+    map.nodeNames[idx] = name;
     map.size = map.size + 1;
 }
 
-function get_idx(place: Node): number {
-
-    return place.id;
-}
-
 function make_edge(to: Node, type: Pathway_type) {
+    const Weight = Pathway_const[type]
 
-    const weight = Pathway_const[type]
-
-    const edge: Edge = {
+    return {
         to: to,
         type: type,
-        weight: weight
+        weight: Weight
     }
-
-    return edge;
 }
 
-export function add_edge(map: ListGraph_withWeights, f: string, t: string, type: Pathway_type): void {
+function add_path(map: Map, idx: number, path: Edge): void {
 
-    const from = ph_lookup(map.Places, f);
-    const to = ph_lookup(map.Places, t);
+    map.adj[idx] = pair(path, map.adj[idx]);
+}
 
-    if(from === undefined) {
+export function add_edge(map: Map, from: string, to: string, type: Pathway_type): void {
 
-        console.log(`${f} does not exist!!`);
+    const src = ph_lookup(map.places, from);
+    const dst = ph_lookup(map.places, to);
 
-    } else if(to === undefined) {
+    if(src === undefined) {
 
-        console.log(`${t} does not exist!!`);
+        console.log(`${from} does not exist!!`);
+
+    } else if(dst === undefined) {
+
+        console.log(`${to} does not exist!!`);
 
     } else {
 
-        const from_idx = get_idx(from);
-        const to_idx = get_idx(to);
+        const srcIdx = src.id;
+        const dstIdx = dst.id;
 
-        const edge_to_to = make_edge(to, type)
-        const edge_to_from = make_edge(from, type);
+        const pathfromsrc = make_edge(dst, type);
+        const pathfromdst = make_edge(src, type);
 
-        map.adj[from_idx] = append(map.adj[from_idx], list(edge_to_to));
-        map.adj[to_idx] = append(map.adj[to_idx], list(edge_to_from));
-        
+        add_path(map, srcIdx, pathfromsrc);
+        add_path(map, dstIdx, pathfromdst);
     }
     
 }
-
-
