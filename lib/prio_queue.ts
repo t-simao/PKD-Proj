@@ -5,9 +5,9 @@
  * The first entry points to the index of the queue's head element,
  * the second entry points to the next empty index of the queue, and
  * the last entry holds the values (contents) of the queue.
- * Each value in the queue has a numeric priority, a larger number meaning
+ * Each value in the queue has a numeric priority, a smaller number meaning
  * a higher priority.
- * @invariant Pairs in the array are ordered by priority, highest first.
+ * @invariant Pairs in the array are ordered by priority, smaller first.
  * @template T type of all queue elements
  */
 export type Prio_Queue<T> = [number, number, Array<[number, T]>];
@@ -34,7 +34,7 @@ export function is_empty<T>(q: Prio_Queue<T>): boolean {
 /**
  * Adds an element to a priority queue.
  * @template T type of all queue elements
- * @param prio priority of the new element (larger means higher priority)
+ * @param prio priority of the new element (smaller means higher priority)
  * @param e element to add
  * @param q queue to add element to
  * @modifies q such that e is added with priority prio
@@ -49,7 +49,7 @@ export function enqueue<T>(prio: number, e: T, q: Prio_Queue<T>): void {
         elems[tail_index] = [prio, e];
         // swap elements until we find the right spot
         for (let i = tail_index; i > head_index; i = i - 1) {
-            if (elems[i - 1][0] >= elems[i][0]) {
+            if (elems[i - 1][0] <= elems[i][0]) {
                 break;
             } else { //swap
                 swap(elems, i, i - 1);
