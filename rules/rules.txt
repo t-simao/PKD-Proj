@@ -1,0 +1,41 @@
+Where, and how often will you meet while working?
+The meetings will take place at the Ångström labory and online. 
+Our im is to meet at least 2-3 times every week.
+
+How do you communicate in the group - what channels? - when?
+Team communication will be done daily trough discord and whatsapp, and 2-3 per week in person. 
+
+How will you use version control (git) and other tools you might agree on, 
+like Trello or OverLeaf?
+Each member will primarily work on its own branch. Trello will be used to facilitate planning of 
+the work and distribution of task. The documentation will be done in OverLeaf, each of the team 
+members being responsible for the documentation of their own work. 
+
+How do you coordinate the final hand-in?
+Upon the completion of a version of the project that is considered ready for submition, all member 
+will test to verify that it works as intended. Should the version work, the members will explain
+their work to the others so that everyone has a complete understanding of the code. Lastly, one ot the
+members will hand in the assignment.
+
+How do you ensure everyone knows what they should do after their current task,
+and what everyone else is working on?
+Team organisation will be done with the help of trello. Furthermore, the tasks will be shared trough
+communication. Should a team member has no work left, they should help their partners finish theirs.
+
+What should you do if somebody feels left outside?
+In this situation, one should call a meeting with the aim of understanding the problem and 
+resolving it.
+
+What should you do if someone gets stuck on their current task?
+The progress of each member is verified trough communication. Should one progress slower,
+they should be able to ask for help. Should one notice their partner struggling,
+they should offer help or reconsider the task assignment.
+
+What happens if someone feels another person isn’t doing their fair share?
+In such case, communication is essential. If necessary, the team will reajust the tasks. If no cooperation 
+can be achieved, the problem will be reported to the supervisors.
+
+What happens if someone is not communicating in the manner or frequency agreed upon?
+Firstly, the team will attempt to establish communication with the respective member in a way that 
+is easyer to follow for them. If that is not possible, or the member in question is not communicating
+deliberatly, the problem will be reported to the supervisors.
