@@ -1,14 +1,8 @@
 import {
-    type Pair, pair, head, tail, is_member, 
-    type List, is_null, for_each, filter, enum_list, append, list
+    type Pair, type List
 } from './list';
 
-import {
-    type Queue, empty, is_empty, enqueue, dequeue, head as qhead
-} from './queue_array';
-
 // Data type definitions
-
 
 /**
  * An edge in a weighted graph

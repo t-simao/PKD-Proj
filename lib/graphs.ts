@@ -433,7 +433,7 @@ export function lg_restrict({adj, size}: ListGraph, nodes: List<number>): ListGr
 
 }
 
-/**export function SSC_split(lg: ListGraph): List<ListGraph> {
+/** export function SSC_split(lg: ListGraph): List<ListGraph> {
 
     let scc = lg_kosaraju(lg);
     let res = null;
