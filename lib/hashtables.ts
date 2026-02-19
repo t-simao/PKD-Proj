@@ -134,6 +134,7 @@ function bigger_table<K, V>(ht: ProbingHashtable<K, V>): void {
     const ns = ht.keys.length * 2
     ht.keys = new Array(ns)
     ht.values = new Array(ns)
+    ht.entries = 0;
     for(let i = 0; i < old_k.length; i++) {
         const key = old_k[i]
         if (key !== undefined && key !== null) {
@@ -155,7 +156,7 @@ function bigger_table<K, V>(ht: ProbingHashtable<K, V>): void {
 export function ph_insert<K, V>(ht: ProbingHashtable<K,V>, key: K, value: V): boolean {
 
     if (ht.entries >= ht.keys.length * 0.75) {bigger_table(ht)};
-    
+
     const start_idx = ht.hash(key);
     let idx = probe(ht.keys, key, start_idx, false /* don't skip null*/);
 
