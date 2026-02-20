@@ -4,10 +4,15 @@ import { Prio_Queue, empty, enqueue, dequeue, is_empty, head } from "./prio_queu
 
 console.clear()
 
+const E = 'ENTRANCE'
+const R = 'ROOM'
+const S = 'STAIR'
+const EL = 'ELEVATOR'
+
 type Place = {
     id: string,
     index: number,
-    type: 'E' | 'R' | 'ST' | 'El',
+    type: 'ENTRANCE' | 'ROOM' | 'STAIR' | 'ELEVATOR',
     floor: number
 }
 
@@ -63,11 +68,11 @@ function add_connection(g: Graph, from: string, to: string, dist: number) {
 
 const graaa = make_emp();
 
-add_place(graaa, {id: '1', index: 0, type: 'E', floor: 1})
-add_place(graaa, {id: '2', index: 0, type: 'R', floor: 1})
-add_place(graaa, {id: '3', index: 0, type: 'R', floor: 1})
-add_place(graaa, {id: '4', index: 0, type: 'R', floor: 1})
-add_place(graaa, {id: '5', index: 0, type: 'R', floor: 1})
+add_place(graaa, {id: '1', index: 0, type: E, floor: 1})
+add_place(graaa, {id: '2', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '3', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '4', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '5', index: 0, type: R, floor: 1})
 
 add_connection(graaa, '1', '2', 3);
 add_connection(graaa, '1', '3', 10);
