@@ -12,9 +12,9 @@ import { type Pair, type List, head, tail, flatten,
 export type HashFunction<K> = (key: K) => number;
 
 /**
- * A universal identity function.
- * - For numbers: returns the number as is.
- * - For strings: returns the sum of character codes.
+ * Expanded identity function.
+ * For numbers: returns the number as is.
+ * For strings: returns the sum of character codes.
  * @param key the key
  * @returns a numeric representation of the key
  */
@@ -27,6 +27,7 @@ export const hash_id: HashFunction<number | string> = key => {
     for (let i = 0; i < key.length; i++) {
         sum += key.charCodeAt(i);
     }
+
     return sum;
 };
 
@@ -50,15 +51,10 @@ function scan<K, V>(xs: List<Pair<K, V>>, key: K): V | undefined {
             : scan(tail(xs), key);
 }
 
-
-
 // Compute a remainder that has the same sign as the modulus.
 function mod(nmb:number, modulus:number): number {
     return (nmb % modulus + modulus) % modulus;
 }
-
-
-
 
 /**
  * A hash table that resolves collisions by probing
@@ -127,14 +123,20 @@ export function ph_lookup<K, V>(ht: ProbingHashtable<K,V>, key: K): V | undefine
     return idx === undefined ? undefined : ht.values[idx]!;
 }
 
+/**
+ * Increases the size of the hashtable
+ * @param ht The hashtable that needs to be increased
+ * @returns void
+ */
 function bigger_table<K, V>(ht: ProbingHashtable<K, V>): void {
     const old_k = ht.keys
     const old_v = ht.values
-
     const ns = ht.keys.length * 2
+
     ht.keys = new Array(ns)
     ht.values = new Array(ns)
     ht.entries = 0;
+
     for(let i = 0; i < old_k.length; i++) {
         const key = old_k[i]
         if (key !== undefined && key !== null) {
