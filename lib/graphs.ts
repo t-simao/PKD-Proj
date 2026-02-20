@@ -22,6 +22,7 @@ import { push } from './stack';
  */
 export type EdgeList = List<Pair<number, number>>
 
+
 /**
  * A graph in matrix representation is a square matrix of Booleans.
  * @param adj the matrix
@@ -48,7 +49,7 @@ export type ListGraph = {
     size: number
 };
 
-// Helper functions
+
 
 /**
  * Add all reverse edges to an edge list, and remove all self loops.
@@ -322,5 +323,36 @@ export function mg_dfs_visit_order({adj, size}: MatrixGraph,
 
     for_each(dfs_visit, restart_order);
 
+    return result;
+}
+
+
+
+
+export type WeightedEdgeList = List<Pair<Pair<number, number>, number>>
+
+
+export type WeightedGraph = {
+    adj: Array<List<Pair<number,number>>>,
+    size: number
+
+};
+// Helper functions
+
+export function wg_new(size: number): WeightedGraph {
+    return {size, adj: build_array(size, _ => null)};
+}
+
+
+export function wg_from_edges(size: number, weightedEdges: WeightedEdgeList): WeightedGraph {
+    const result = wg_new(size);
+    while (weightedEdges!=null){
+            const bond:Pair<Pair<number,number>,number>= head(weightedEdges);
+            const weight= tail(bond);
+            const edg=head(bond);
+            result.adj[head(edg)] = append(result.adj[head(edg)],list(pair(tail(edg),weight)));
+            result.adj[tail(edg)] = append(result.adj[tail(edg)],list(pair(head(edg),weight)));
+            weightedEdges=tail(weightedEdges);
+    }
     return result;
 }
