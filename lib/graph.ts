@@ -7,7 +7,8 @@ console.clear()
 type Place = {
     id: string,
     index: number,
-    type: 'E' | 'R' | 'ST' | 'El'
+    type: 'E' | 'R' | 'ST' | 'El',
+    floor: number
 }
 
 type Connection = {
@@ -16,7 +17,6 @@ type Connection = {
 }
 
 type Graph = {
-    floor: number,
     ids: Array<string>,
     Rooms: ProbingHashtable<string, Place>,
     adj: Array<List<Connection>>,
@@ -25,7 +25,6 @@ type Graph = {
 
 function make_emp(): Graph {
     return {
-        floor: 0,
         ids: [],
         Rooms: ph_empty<string, Place>(1, hash_id), 
         adj: [], 
@@ -59,17 +58,16 @@ function add_connection(g: Graph, from: string, to: string, dist: number) {
 
     g.adj[x.index] = append(g.adj[x.index], list(connection_1))
     g.adj[y.index] = append(g.adj[y.index], list(connection_2))
-    // console.log(`added ${x.id} to ${y.id}`);
 }
 
 
 const graaa = make_emp();
 
-add_place(graaa, {id: '1', index: 0, type: 'E'})
-add_place(graaa, {id: '2', index: 0, type: 'R'})
-add_place(graaa, {id: '3', index: 0, type: 'R'})
-add_place(graaa, {id: '4', index: 0, type: 'R'})
-add_place(graaa, {id: '5', index: 0, type: 'R'})
+add_place(graaa, {id: '1', index: 0, type: 'E', floor: 1})
+add_place(graaa, {id: '2', index: 0, type: 'R', floor: 1})
+add_place(graaa, {id: '3', index: 0, type: 'R', floor: 1})
+add_place(graaa, {id: '4', index: 0, type: 'R', floor: 1})
+add_place(graaa, {id: '5', index: 0, type: 'R', floor: 1})
 
 add_connection(graaa, '1', '2', 3);
 add_connection(graaa, '1', '3', 10);
