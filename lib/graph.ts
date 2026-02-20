@@ -58,29 +58,10 @@ function add_connection(g: Graph, from: string, to: string, dist: number) {
 
     const connection_1: Connection = {to: y.id, dist};
     const connection_2: Connection = {to: x.id, dist};
-    
-    if (x.index === undefined || y.index === undefined) return;
 
     g.adj[x.index] = append(g.adj[x.index], list(connection_1))
     g.adj[y.index] = append(g.adj[y.index], list(connection_2))
 }
-
-
-const graaa = make_emp();
-
-add_place(graaa, {id: '1', index: 0, type: E, floor: 1})
-add_place(graaa, {id: '2', index: 0, type: R, floor: 1})
-add_place(graaa, {id: '3', index: 0, type: R, floor: 1})
-add_place(graaa, {id: '4', index: 0, type: R, floor: 1})
-add_place(graaa, {id: '5', index: 0, type: R, floor: 1})
-
-add_connection(graaa, '1', '2', 3);
-add_connection(graaa, '1', '3', 10);
-add_connection(graaa, '2', '4', 5);
-add_connection(graaa, '4', '5', 2);
-add_connection(graaa, '3', '5', 2);
-add_connection(graaa, '3', '4', 2);
-
 
 function build_array<T>(size: number, content: (i: number) => T): Array<T> {
     const result = Array<T>(size);
@@ -102,11 +83,11 @@ function path_fixer(ids: Array<string>, previous: Array<number>, src: number, de
     return path.reverse();
 }
 
-function dijkstra({adj, Rooms, entries, ids}: Graph, start: string, end: string): any {
+function dijkstra({adj, Rooms, entries, ids}: Graph, start: string, end: string): Array<string> {
     const sp = ph_lookup(Rooms, start);
     const ep = ph_lookup(Rooms, end);
 
-    if (sp === undefined || ep === undefined) return null;
+    if (sp === undefined || ep === undefined) return [];
 
     const src = sp.index;
     const dest = ep.index;
@@ -122,7 +103,7 @@ function dijkstra({adj, Rooms, entries, ids}: Graph, start: string, end: string)
         const [d, u] = head(q);
         dequeue(q);
 
-        if(u === dest) break
+        if(u === dest) break;
         if (d > dist[u]) continue;
 
         let li = adj[u];
@@ -146,7 +127,24 @@ function dijkstra({adj, Rooms, entries, ids}: Graph, start: string, end: string)
         }
     }
 
-    return path_fixer(ids, previous, src, dest);
+    return dist[dest] !== Infinity ? path_fixer(ids, previous, src, dest) : [];
 }
+
+/** Testing the things, we out here! */
+
+const graaa = make_emp();
+
+add_place(graaa, {id: '1', index: 0, type: E, floor: 1})
+add_place(graaa, {id: '2', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '3', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '4', index: 0, type: R, floor: 1})
+add_place(graaa, {id: '5', index: 0, type: R, floor: 1})
+
+add_connection(graaa, '1', '2', 3);
+add_connection(graaa, '1', '3', 10);
+add_connection(graaa, '2', '4', 5);
+add_connection(graaa, '4', '5', 2);
+add_connection(graaa, '3', '5', 2);
+add_connection(graaa, '3', '4', 2);
 
 console.log(dijkstra(graaa, '1', '4'));
