@@ -1,5 +1,5 @@
-import { type List, pair, list, tail, head, for_each, remove } from './list';
-import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable} from './hashtables'
+import { type List, pair, list, tail, head } from './list';
+import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable } from './hashtables'
 
 // Data type definitions
 type Pathway_type = "hallway" | "elevator" | "ramp" | "stairs";
@@ -8,7 +8,7 @@ const Pathway_const: Record<Pathway_type, number> = {
     hallway: 5,
     elevator: 10,
     ramp: 15,
-    stairs: 25
+    stairs: 0
 }
 
 type Node = {
@@ -75,19 +75,31 @@ function get_dst(map: Map, edge: Edge): string {
     return dst.name;
 }
 
-function get_node(ht: ProbingHashtable<string, Node>, place: string): Node | undefined {
+export function get_node_ht(map: Map, place: string): Node | undefined {
 
-    return ph_lookup(ht, place);;
+    return ph_lookup(map.places, place);;
 }
 
-function get_id(node: Node): number {
+export function get_node_arr(map: Map, idx: number): Node {
+
+    return map.nodes[idx];
+}
+
+export function get_id(node: Node): number {
 
     return node.id;;
 }
 
-function get_name(node: Node): string {
+export function get_name(node: Node): string {
 
-    return node.name;;
+    return node.name;
+}
+export function get_name_by_id(map: Map, id: number): string {
+
+    const arr = map.nodes;
+    const curr_node = arr[id];
+
+    return curr_node.name;
 }
 
 function rev_path(map: Map, idx: number, dst: number): void {
@@ -117,7 +129,7 @@ function rev_path(map: Map, idx: number, dst: number): void {
  */
 export function make_map(): Map{
     return {
-        places: ph_empty<string, Node>(1, hash_id),
+        places: ph_empty<string, Node>(15, hash_id),
         nodes: [],
         adj: [],
         size: 0
@@ -125,7 +137,7 @@ export function make_map(): Map{
 }
 
 export function add_place(map: Map, name: string, floor: number): void {
-    if(ph_lookup(map.places, name) !== undefined) {
+    if(get_node_ht(map, name) !== undefined) {
 
         console.log(`${name} already exist, no need to add!!`)
         return;
@@ -162,8 +174,8 @@ function path_exist(map: Map, from: Node, to: Node): boolean {
 
 export function add_edge(map: Map, from: string, type: Pathway_type, to: string): void {
 
-    const src = get_node(map.places, from);
-    const dst = get_node(map.places, to);
+    const src = get_node_ht(map, from);
+    const dst = get_node_ht(map, to);
 
     if(src === undefined) {
 
@@ -193,8 +205,8 @@ export function add_edge(map: Map, from: string, type: Pathway_type, to: string)
 
 export function rev_edge(map: Map, from: string, to: string): void {
 
-    const src = get_node(map.places, from);
-    const dst = get_node(map.places, to);
+    const src = get_node_ht(map, from);
+    const dst = get_node_ht(map, to);
 
     if(src === undefined) {
 
@@ -219,13 +231,13 @@ export function rev_edge(map: Map, from: string, to: string): void {
     
 }
 
-const map = make_map();
+export const map = make_map();
 
-add_place(map, "Entrance", 1);
-add_place(map, "Library", 1);
-add_place(map, "Café", 1);
-add_place(map, "Stairs1", 1);
-add_place(map, "Lounge", 2);
+add_place(map, "Entrance", 1); //0
+add_place(map, "Library", 1); //1
+add_place(map, "Café", 1); //2
+add_place(map, "Stairs1", 1); //3
+add_place(map, "Lounge", 2); //4
 
 add_edge(map, "Entrance", "hallway", "Library"); 
 add_edge(map, "Entrance", "stairs", "Stairs1");  
@@ -233,7 +245,7 @@ add_edge(map, "Library", "ramp", "Café");
 add_edge(map, "Stairs1", "stairs", "Lounge");
 add_edge(map, "Café", "elevator",  "Lounge");
 
-console.log(map.nodes[0]);
+/** console.log(map.nodes[0]);
 let r = map.adj[0];
 
 console.log("__________________PATHS FROM ENTRANCE_____________________________________")
@@ -252,4 +264,4 @@ for(let i = 0; i < map.nodes.length; i = i + 1) {
     console.log("_________________________THE FULL NODE INFO_____________________________")
     console.log(map.nodes[i]);
 
-} 
+} */
