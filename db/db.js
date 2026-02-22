@@ -37,12 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = connectDB;
-var mongodb_1 = require("mongodb");
 var dotenv = require("dotenv");
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../.env', override: true });
+var mongodb_1 = require("mongodb");
 var username = process.env.DB_USERNAME;
 var password = process.env.DB_PASSWORD;
-console.log(username, password);
 var uri = "mongodb+srv://".concat(username, ":").concat(password, "@cluster0.mhxdv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 var client = new mongodb_1.MongoClient(uri);
 var db;
@@ -56,10 +55,12 @@ function connectDB() {
                     return [4 /*yield*/, client.connect()];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, client.db("PKD-proj").command({ ping: 1 })];
+                    return [4 /*yield*/, client.db("PKD-proj").command({ ping: 1 })
+                        // console.log(ping);
+                    ];
                 case 2:
                     ping = _a.sent();
-                    console.log(ping);
+                    // console.log(ping);
                     db = client.db("PKD-proj");
                     _a.label = 3;
                 case 3: return [2 /*return*/, db];
