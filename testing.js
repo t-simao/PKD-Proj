@@ -37,8 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.map = void 0;
+var dotenv = require("dotenv");
+dotenv.config();
 var db_1 = require("./db/db");
 var building_1 = require("./lib/building");
+var list_1 = require("./lib/list");
+var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
+console.clear();
 exports.map = (0, building_1.make_map)();
 // ---------- FLOOR 1 ----------
 (0, building_1.add_place)(exports.map, "Entrance", 1); //0
@@ -82,6 +87,8 @@ exports.map = (0, building_1.make_map)();
 (0, building_1.add_edge)(exports.map, "Stairs2", "Hallway_L", "HallB");
 (0, building_1.add_edge)(exports.map, "Elevator2", "Hallway_L", "HallB");
 (0, building_1.add_edge)(exports.map, "Stairs3", "Hallway_S", "HallC");
+(0, Dijkstra_Alg_1.shortest_path)(exports.map, "Entrance", "ConferenceRoom");
+console.log("---------------------------------------s");
 function createMap(map) {
     return __awaiter(this, void 0, void 0, function () {
         var db, maps, res;
@@ -103,4 +110,88 @@ function createMap(map) {
         });
     });
 }
-createMap(exports.map);
+function reMap(map) {
+    var newMap = (0, building_1.make_map)();
+    for (var _i = 0, _a = map.nodes; _i < _a.length; _i++) {
+        var node = _a[_i];
+        (0, building_1.add_place)(newMap, node.name, node.floor);
+    }
+    var i = 0;
+    while (i < map.size) {
+        var name_1 = map.nodes[i].name;
+        var li = map.adj[i];
+        while (!(0, list_1.is_null)(li)) {
+            var f = (0, list_1.head)(li);
+            var name_to = map.nodes[f.to].name;
+            (0, building_1.add_edge)(newMap, name_1, f.type, name_to);
+            li = (0, list_1.tail)(li);
+        }
+        i++;
+    }
+    return newMap;
+}
+function findMap(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var db, maps, res, newMap;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
+                case 1:
+                    db = _a.sent();
+                    maps = db.collection("maps");
+                    return [4 /*yield*/, maps.findOne({ _id: id, })];
+                case 2:
+                    res = _a.sent();
+                    if (!res || res.map === undefined)
+                        return [2 /*return*/];
+                    newMap = reMap(res.map);
+                    return [2 /*return*/, { _id: res._id, map: newMap }];
+            }
+        });
+    });
+}
+function UpdateMap(id, map) {
+    return __awaiter(this, void 0, void 0, function () {
+        var db, maps;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
+                case 1:
+                    db = _a.sent();
+                    maps = db.collection("maps");
+                    return [4 /*yield*/, maps.updateOne({ _id: id }, { $set: { map: map } })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function () {
+        var b;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, findMap("Building 1")];
+                case 1:
+                    b = _a.sent();
+                    if (b === null || b === undefined)
+                        return [2 /*return*/];
+                    (0, Dijkstra_Alg_1.shortest_path)(b.map, "Entrance", "ConferenceRoom");
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+main();
+//db.users.findOne({ name: “Arafat” })
+//db.maps.updateOne({ _id: "Arafat" }, { $set: { map: map } })
+/**
+ * fetch building
+ * building_id = adwad
+ * let building = findbyid(building_id)
+ * ad_eddge(building)
+ *
+ * updateone(building, map: building)
+ */
+// createMap(map);

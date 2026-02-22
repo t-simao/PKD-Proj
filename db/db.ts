@@ -1,8 +1,13 @@
 import { MongoClient, Db } from 'mongodb'
-import * as dotenv from 'dotenv'
-dotenv.config()
-const username = process.env.USERNAME
-const password = process.env.PASSWORD
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
+
+const username = process.env.DB_USERNAME
+const password = process.env.DB_PASSWORD
+
+console.log(username, password);
+
+
 const uri = `mongodb+srv://${username}:${password}@cluster0.mhxdv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri);
 
@@ -18,3 +23,5 @@ export async function connectDB(): Promise<Db> {
 
   return db;
 }
+
+// connectDB()

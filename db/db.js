@@ -38,7 +38,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = connectDB;
 var mongodb_1 = require("mongodb");
-var uri = "mongodb+srv://teophilsimao:000pkd000@cluster0.mhxdv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+var dotenv = require("dotenv");
+dotenv.config({ path: '../.env' });
+var username = process.env.DB_USERNAME;
+var password = process.env.DB_PASSWORD;
+console.log(username, password);
+var uri = "mongodb+srv://".concat(username, ":").concat(password, "@cluster0.mhxdv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 var client = new mongodb_1.MongoClient(uri);
 var db;
 function connectDB() {
@@ -62,4 +67,4 @@ function connectDB() {
         });
     });
 }
-console.log(connectDB());
+// connectDB()

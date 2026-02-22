@@ -138,11 +138,7 @@ export function make_map(): Map{
 }
 
 export function add_place(map: Map, name: string, floor: number): void {
-    if(get_node_ht(map, name) !== undefined) {
-
-        console.log(`${name} already exist, no need to add!!`)
-        return;
-    }
+    if(get_node_ht(map, name) !== undefined) return;
     
     const idx = map.size;
     const key = name;
@@ -178,30 +174,16 @@ export function add_edge(map: Map, from: string, type: Pathway_type, to: string)
     const src = get_node_ht(map, from);
     const dst = get_node_ht(map, to);
 
-    if(src === undefined) {
-
-        console.log(`${from} does not exist!!`);
-
-    } else if(dst === undefined) {
-
-        console.log(`${to} does not exist!!`);
-
-    } else if(path_exist(map, src, dst)) {
-
-        console.log("Path already exists!!");
-
-    } else {
-
-        const srcIdx = get_id(src);
-        const dstIdx = get_id(dst);
-
-        const pathfromsrc = make_edge(dst, type);
-        const pathfromdst = make_edge(src, type);
-
-        add_path(map, srcIdx, pathfromsrc);
-        add_path(map, dstIdx, pathfromdst);
-    }
+    if(src === undefined || dst === undefined || path_exist(map, src, dst)) return; 
     
+    const srcIdx = get_id(src);
+    const dstIdx = get_id(dst);
+
+    const pathfromsrc = make_edge(dst, type);
+    const pathfromdst = make_edge(src, type);
+
+    add_path(map, srcIdx, pathfromsrc);
+    add_path(map, dstIdx, pathfromdst);
 }
 
 export function rev_edge(map: Map, from: string, to: string): void {
@@ -209,27 +191,17 @@ export function rev_edge(map: Map, from: string, to: string): void {
     const src = get_node_ht(map, from);
     const dst = get_node_ht(map, to);
 
-    if(src === undefined) {
+    if(src === undefined || dst === undefined) return;
 
-        console.log(`${from} does not exist!!`);
-
-    } else if(dst === undefined) {
-
-        console.log(`${to} does not exist!!`);
-
-    } else if(!path_exist(map, src, dst)) {
-
+    if(!path_exist(map, src, dst)) {
         console.log("Path doesn't exist!!");
-
     } else {
-
         const srcIdx = get_id(src);
         const dstIdx = get_id(dst);
 
         rev_path(map, srcIdx, dstIdx);
         rev_path(map, dstIdx, srcIdx);
     }
-    
 }
 
 /** console.log(map.nodes[0]);

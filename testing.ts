@@ -1,9 +1,18 @@
+import * as dotenv from 'dotenv';
+dotenv.config()
+
 import { Map } from './lib/building';
 import { connectDB } from './db/db'
 import { make_map, add_place, add_edge } from './lib/building';
+import { is_null, head, tail } from './lib/list';
+import { shortest_path } from './lib/Dijkstra_Alg';
+
+
+
+console.clear()
 
 type Building = {
-    _id?: string
+    _id: string
     map: Map
 }
 
@@ -73,6 +82,9 @@ add_edge(map,"Elevator2","Hallway_L","HallB");
 
 add_edge(map,"Stairs3","Hallway_S","HallC");
 
+shortest_path(map, "Entrance", "ConferenceRoom")
+console.log("---------------------------------------s")
+
 async function createMap(map: Map) {
     const db = await connectDB();
     const maps = db.collection<Building>("maps")
@@ -85,4 +97,80 @@ async function createMap(map: Map) {
     console.log(res.insertedId);
 }
 
+
+function reMap(map: Map): Map {
+    let newMap = make_map();
+
+    for (const node of map.nodes) {
+        add_place(newMap, node.name, node.floor);
+    }
+
+    let i = 0;
+    while (i < map.size) {
+        const name = map.nodes[i].name
+        let li = map.adj[i]
+        while(!is_null(li)){
+            const f = head(li);
+            const name_to = map.nodes[f.to].name
+            add_edge(newMap, name, f.type, name_to)
+            li = tail(li)
+        }
+        i++
+    }
+
+    return newMap
+}
+
+async function findMap(id: string) {
+    const db = await connectDB();
+    const maps = db.collection<Building>("maps")
+
+    const res = await maps.findOne({_id: id,})
+
+    if (!res || res.map === undefined) return;
+
+    const newMap = reMap(res.map)
+    
+    return {_id: res._id, map: newMap}
+}
+
+async function UpdateMap(id: string, map: Map) {
+    const db = await connectDB();
+    const maps = db.collection<Building>("maps")
+
+     await maps.updateOne({_id: id},{$set: { map: map }})
+}
+
+async function main() {
+    // createMap(map);
+    // const a = await findMap("Building 1")
+
+    // if (a === null || a === undefined) return;
+    // let mapy = a.map;
+
+    // add_place(mapy, "Angola", 10);
+    // UpdateMap(a._id, mapy);
+
+    const b = await findMap("Building 1")
+
+    if (b === null || b === undefined) return;
+
+    shortest_path(b.map, "Entrance", "ConferenceRoom")
+}
+
+main()
+
+//db.users.findOne({ name: “Arafat” })
+
+
+
+//db.maps.updateOne({ _id: "Arafat" }, { $set: { map: map } })
+/**
+ * fetch building
+ * building_id = adwad
+ * let building = findbyid(building_id)
+ * ad_eddge(building)
+ * 
+ * updateone(building, map: building)
+ */
 // createMap(map);
