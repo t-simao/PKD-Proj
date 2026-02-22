@@ -68,37 +68,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectDB = connectDB;
 var dotenv = __importStar(require("dotenv"));
-dotenv.config({ path: '../.env', override: true });
-var mongodb_1 = require("mongodb");
-var username = process.env.DB_USERNAME;
-var password = process.env.DB_PASSWORD;
-var uri = "mongodb+srv://".concat(username, ":").concat(password, "@cluster0.mhxdv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
-var client = new mongodb_1.MongoClient(uri);
-var db;
-function connectDB() {
-    return __awaiter(this, void 0, void 0, function () {
-        var ping;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!!db) return [3 /*break*/, 3];
-                    return [4 /*yield*/, client.connect()];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, client.db("PKD-proj").command({ ping: 1 })
-                        // console.log(ping);
-                    ];
-                case 2:
-                    ping = _a.sent();
-                    // console.log(ping);
-                    db = client.db("PKD-proj");
-                    _a.label = 3;
-                case 3: return [2 /*return*/, db];
-            }
-        });
+dotenv.config();
+var building_1 = require("./lib/building");
+var testing_1 = require("./testing");
+var express_1 = __importDefault(require("express"));
+var PORT = process.env.SR_PORT || 9000;
+var app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.get("/maps/get/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var map;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, testing_1.findMap)(req.params.id)];
+            case 1:
+                map = _a.sent();
+                if (!map)
+                    return [2 /*return*/, res.status(404).json({ error: "Not found" })];
+                res.json(map);
+                return [2 /*return*/];
+        }
     });
-}
-// connectDB()
+}); });
+app.post("/maps/create/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var map;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, testing_1.createMap)(req.params.id, (0, building_1.make_map)())];
+            case 1:
+                map = _a.sent();
+                if (!map)
+                    return [2 /*return*/, res.status(404).json({ error: "Failed to create" })];
+                res.json(map);
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.listen(PORT, function () {
+    console.log("".concat(PORT));
+});

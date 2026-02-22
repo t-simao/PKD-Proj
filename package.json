@@ -7,11 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/node": "^25.3.0",
     "dotenv": "^17.3.1",
+    "express": "^5.2.1",
     "mongodb": "^7.1.0",
     "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/prompt-sync": "^4.2.3",
     "ts-jest": "^29.4.6"

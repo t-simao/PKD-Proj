@@ -9,7 +9,7 @@ import { shortest_path } from './lib/Dijkstra_Alg';
 
 
 
-console.clear()
+// console.clear()
 
 type Building = {
     _id: string
@@ -82,19 +82,19 @@ add_edge(map,"Elevator2","Hallway_L","HallB");
 
 add_edge(map,"Stairs3","Hallway_S","HallC");
 
-shortest_path(map, "Entrance", "ConferenceRoom")
-console.log("---------------------------------------s")
+// shortest_path(map, "Entrance", "ConferenceRoom")
+// console.log("---------------------------------------s")
 
-async function createMap(map: Map) {
+export async function createMap(id: string, map: Map) {
     const db = await connectDB();
     const maps = db.collection<Building>("maps")
 
     const res = await maps.insertOne({
-        _id: "Building 1",
+        _id: id,
         map: map
     })
     
-    console.log(res.insertedId);
+    return res
 }
 
 
@@ -121,7 +121,7 @@ function reMap(map: Map): Map {
     return newMap
 }
 
-async function findMap(id: string) {
+export async function findMap(id: string) {
     const db = await connectDB();
     const maps = db.collection<Building>("maps")
 
@@ -134,12 +134,28 @@ async function findMap(id: string) {
     return {_id: res._id, map: newMap}
 }
 
-async function UpdateMap(id: string, map: Map) {
+export async function UpdateMap(id: string, map: Map) {
     const db = await connectDB();
     const maps = db.collection<Building>("maps")
 
-     await maps.updateOne({_id: id},{$set: { map: map }})
+     return await maps.updateOne({_id: id},{$set: { map: map }})
 }
+
+export async function addPlace(id: string, name: string, floor: number) {
+    const db = await connectDB();
+    const maps = db.collection<Building>("maps")
+
+    let map = await findMap(id);
+    
+    if (!map) return;
+
+    add_place(map.map, name, floor)
+
+    return await maps.updateOne({_id: id},{$set: { map: map.map }})
+}
+
+// addPlace('building 2', 'megaChurch', 99);
+
 
 async function main() {
     // createMap(map);
@@ -158,7 +174,7 @@ async function main() {
     shortest_path(b.map, "Entrance", "ConferenceRoom")
 }
 
-main()
+// main()
 
 //db.users.findOne({ name: “Arafat” })
 

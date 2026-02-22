@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -37,13 +70,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.map = void 0;
-var dotenv = require("dotenv");
+exports.createMap = createMap;
+exports.findMap = findMap;
+exports.UpdateMap = UpdateMap;
+exports.addPlace = addPlace;
+var dotenv = __importStar(require("dotenv"));
 dotenv.config();
 var db_1 = require("./db/db");
 var building_1 = require("./lib/building");
 var list_1 = require("./lib/list");
 var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
-console.clear();
 exports.map = (0, building_1.make_map)();
 // ---------- FLOOR 1 ----------
 (0, building_1.add_place)(exports.map, "Entrance", 1); //0
@@ -87,9 +123,9 @@ exports.map = (0, building_1.make_map)();
 (0, building_1.add_edge)(exports.map, "Stairs2", "Hallway_L", "HallB");
 (0, building_1.add_edge)(exports.map, "Elevator2", "Hallway_L", "HallB");
 (0, building_1.add_edge)(exports.map, "Stairs3", "Hallway_S", "HallC");
-(0, Dijkstra_Alg_1.shortest_path)(exports.map, "Entrance", "ConferenceRoom");
-console.log("---------------------------------------s");
-function createMap(map) {
+// shortest_path(map, "Entrance", "ConferenceRoom")
+// console.log("---------------------------------------s")
+function createMap(id, map) {
     return __awaiter(this, void 0, void 0, function () {
         var db, maps, res;
         return __generator(this, function (_a) {
@@ -99,13 +135,12 @@ function createMap(map) {
                     db = _a.sent();
                     maps = db.collection("maps");
                     return [4 /*yield*/, maps.insertOne({
-                            _id: "Building 1",
+                            _id: id,
                             map: map
                         })];
                 case 2:
                     res = _a.sent();
-                    console.log(res.insertedId);
-                    return [2 /*return*/];
+                    return [2 /*return*/, res];
             }
         });
     });
@@ -160,13 +195,33 @@ function UpdateMap(id, map) {
                     db = _a.sent();
                     maps = db.collection("maps");
                     return [4 /*yield*/, maps.updateOne({ _id: id }, { $set: { map: map } })];
-                case 2:
-                    _a.sent();
-                    return [2 /*return*/];
+                case 2: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
+function addPlace(id, name, floor) {
+    return __awaiter(this, void 0, void 0, function () {
+        var db, maps, map;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
+                case 1:
+                    db = _a.sent();
+                    maps = db.collection("maps");
+                    return [4 /*yield*/, findMap(id)];
+                case 2:
+                    map = _a.sent();
+                    if (!map)
+                        return [2 /*return*/];
+                    (0, building_1.add_place)(map.map, name, floor);
+                    return [4 /*yield*/, maps.updateOne({ _id: id }, { $set: { map: map.map } })];
+                case 3: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+addPlace('building 2', 'megaChurch', 99);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
         var b;
@@ -183,7 +238,7 @@ function main() {
         });
     });
 }
-main();
+// main()
 //db.users.findOne({ name: “Arafat” })
 //db.maps.updateOne({ _id: "Arafat" }, { $set: { map: map } })
 /**

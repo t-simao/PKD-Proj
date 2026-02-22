@@ -147,15 +147,15 @@ export function shortest_path(map: Map, from: string, to: string, skip_stairs: b
     }
 }
 
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Entrance","Library");
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Library","Café");
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Entrance","Lounge");
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Entrance","ConferenceRoom", true);
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Library","Library");
-console.log("------------------------- PATH -------------------------");
-shortest_path(map,"Moon","Library");
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Entrance","Library");
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Library","Café");
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Entrance","Lounge");
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Entrance","ConferenceRoom", true);
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Library","Library");
+// console.log("------------------------- PATH -------------------------");
+// shortest_path(map,"Moon","Library");
