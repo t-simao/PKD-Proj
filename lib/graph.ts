@@ -30,6 +30,8 @@ type Graph = {
     entries: number
 }
 
+/** FUNCTIONS  */
+
 function make_emp(): Graph {
     return {
         ids: [],
@@ -39,8 +41,6 @@ function make_emp(): Graph {
     }; 
 }
 
-
-/** FUNCTIONS  */
 function check_empty(ids: Array<string>): number {
     for(let i = 0; i < ids.length; i++) {
         if(ids[i] === '') {
