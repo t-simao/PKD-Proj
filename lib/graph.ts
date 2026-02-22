@@ -4,6 +4,8 @@ import { Prio_Queue, empty, enqueue, dequeue, is_empty, head } from "./prio_queu
 
 console.clear()
 
+
+/** TYPES */
 const E = 'ENTRANCE'
 const R = 'ROOM'
 const S = 'STAIR'
@@ -37,6 +39,8 @@ function make_emp(): Graph {
     }; 
 }
 
+
+/** FUNCTIONS  */
 function check_empty(ids: Array<string>): number {
     for(let i = 0; i < ids.length; i++) {
         if(ids[i] === '') {
@@ -209,6 +213,14 @@ function dijkstra({adj, Rooms, entries, ids}: Graph, start: string, end: string)
 
     return dist[dest] !== Infinity ? path_fixer(ids, previous, src, dest) : [];
 }
+
+
+
+
+
+
+
+
 
 /** Testing the things, we out here! */
 
