@@ -3,7 +3,7 @@ import { type Prio_Queue, empty, is_empty as pq_is_empty, head as pq_head,
 import { build_array } from './graphs';
 import { head, tail} from './list';
 
-import {map, type Map, get_node_ht, get_id, get_name_by_id } from './map'
+import {map, type Map, get_node_ht, get_id, get_name_by_id } from './building'
 
 type Path_Info = {
 
@@ -78,6 +78,7 @@ export function shortest_path(map: Map, from: string, to: string, skip_stairs: b
     if(src === undefined) {
 
         console.log(`${from} does not exist, add the place first!!`);
+        return -1;
 
     } else if(dst === undefined) {
 

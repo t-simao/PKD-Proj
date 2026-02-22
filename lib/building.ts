@@ -4,7 +4,7 @@ import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable } from './has
 // Data type definitions
 type Pathway_type = "Hallway_S" | "Hallway_L" | "Elevator" | "Ramp" | "Stairs";
 
-const Pathway_const: Record<Pathway_type, number> = {
+export const Pathway_const: Record<Pathway_type, number> = {
     Hallway_S: 5,
     Ramp: 8,
     Hallway_L: 10,
