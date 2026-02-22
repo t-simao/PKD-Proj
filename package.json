@@ -7,12 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.2.1",
     "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/prompt-sync": "^4.2.3",
-    "ts-jest": "^29.4.6",
-    "@types/jest": "^30.0.0"
+    "ts-jest": "^27.0.3"
   },
   "type": "commonjs"
 }
