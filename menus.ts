@@ -1,6 +1,3 @@
-import * as promptSync from 'prompt-sync';
-const prompt = promptSync();
-
 export type Menu = {
     menu: string,
     options: Array<string>
@@ -43,10 +40,10 @@ export const your_map_menu: Menu = { menu: `
     |  D) Get Path             |
     |  E) Download Map         |
     |  F) Go Back              |
-    |  G) Quit                 |
+    |  q) Quit                 |
     ============================
 `,
-    options: ["a", "b", "c", "d", "e", "f", "g"]
+    options: ["a", "b", "c", "d", "e", "f", "q"]
 };
 
 export const pathways_menu: Menu = { menu: `
@@ -59,12 +56,13 @@ export const pathways_menu: Menu = { menu: `
     |  D) Elevator                    |
     |  E) Stairs                      |
     |  F) Ramp                        |
+    |  q) Quit                        |
     ===================================
 `,
-    options: ["a", "b", "c", "d", "e", "f"]
+    options: ["a", "b", "c", "d", "e", "f", "q"]
 };
 
-export const geting_path: string = `
+export const getting_path: string = `
     ============================
     |       Getting Path       |
     ============================
