@@ -1,10 +1,14 @@
 import * as promptSync from 'prompt-sync';
 const prompt = promptSync();
 
-import { add_place, add_path, rev_path, type Map, Pathway_type_arr, type Pathway_type} from './lib/building';
+import { add_place, add_path, rev_path, type Map, Pathway_type_arr, type Pathway_type, make_map} from './lib/building';
 import { get_path } from './lib/Dijkstra_Alg';
 import { adding_place, adding_path, removing_path, getting_path, mode_menu, type Menu, your_map_menu, 
-    barrier, mainMenu, pathways_menu } from './menus'
+    barrier, mainMenu, pathways_menu, 
+    path_banner,
+    alt_mainMenu} from './menus'
+
+import { download_map, upload_map } from './lib/read_write';
 
 function isOnlyNumbers(str: string): boolean {
   return /^\d+$/.test(str);
@@ -17,7 +21,7 @@ export function invalid(): void {
     prompt("PRESS ANY KEY TO TRY AGAIN!!");
 }
 
-export function is_valid<T>(arr: Array<string>, val: string): boolean {
+export function is_valid(arr: Array<string>, val: string): boolean {
     return arr.includes(val)
 }
 
@@ -64,38 +68,34 @@ export function extra_opt_menu(menu: Menu): string {
     return choice;
 }
 
-function banner(str: string): void {
+export function banner(str: string): void {
 
     process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()
     console.log(barrier);
     console.log(str);
+    quit_banner();
 }
 
-function pause_screen(): void {
+export function pause_screen(): void {
 
     console.log(barrier);
     console.log();
 
     enter();
-    console.log();
-
-    console.log(barrier);
-    console.log();
-
 }
 
 function enter(): void {
     prompt("Press enter to continue ↵");
 }
 
-function quit_banner(): void {
+export function quit_banner(): void {
     console.log(barrier);
     console.log(`TYPE "q" to quit!!!`);
     console.log(barrier);
     console.log();
 }
 
-function quit(str: string): boolean {
+export function quit(str: string): boolean {
     str = str.toLowerCase();
     return str === "q" ? true : false;
 }
@@ -103,7 +103,6 @@ function quit(str: string): boolean {
 function user_add_place(map: Map): void {
 
     banner(adding_place);
-    quit_banner();
 
     const name = prompt("Name: ");
 
@@ -124,8 +123,8 @@ function user_add_place(map: Map): void {
 
     const floor = parseInt(floorStr);
 
+    console.log();
     add_place(map, name, floor);
-
     pause_screen();
 }
 
@@ -135,7 +134,6 @@ function isPathwayType(str: string): str is Pathway_type {
 
 export function user_add_path(map: Map): void {
     banner(adding_path);
-    quit_banner();
 
     const from = prompt("From: ");
     if(quit(from)) return;
@@ -152,6 +150,8 @@ export function user_add_path(map: Map): void {
     let choice = extra_opt_menu(pathways_menu);
     if(quit(choice)) return;
 
+    console.log(barrier);
+
     const user_type = allTypes[choice];
 
     if(isPathwayType(user_type)) {
@@ -159,7 +159,7 @@ export function user_add_path(map: Map): void {
         console.log();
         const to = prompt("To: ");
 
-    
+        console.log(barrier);
         add_path(map, from, user_type, to);
     } 
     
@@ -168,7 +168,6 @@ export function user_add_path(map: Map): void {
 
 export function user_rev_path(map: Map): void {
     banner(removing_path);
-    quit_banner();
 
     const from = prompt("From: ");
     if(quit(from)) return;
@@ -176,14 +175,15 @@ export function user_rev_path(map: Map): void {
     const to = prompt("To: ");
     if(quit(to)) return;
     
-    rev_path(map, from, to);
+    console.log();
+    console.log(barrier);
 
+    rev_path(map, from, to);
     pause_screen();
 }
 
 export function user_get_path(map: Map): void {
     banner(getting_path);
-    quit_banner();
 
     const from = prompt("From: ");
     if(quit(from)) return;
@@ -205,63 +205,102 @@ export function user_get_path(map: Map): void {
 
     if(choice === "d") {
 
+        console.log();
+        console.log(path_banner);
+        console.log();
+        
+        console.log(barrier);
         get_path(map, from, to);
 
     } else {
 
+        console.log();
+        console.log(path_banner);
+        console.log();
+        
+        console.log(barrier);
         get_path(map, from, to, paths[choice]);
+
     }
 
     pause_screen();
 }
 
-function your_map(map: Map): boolean {
+function use_map(map: Map): boolean {
 
     let running = true;
     let choice = "";
 
-    const actions: Record<string, () => void> = {
+    const actions: Record<string, () => void | boolean> = {
         a: () => user_add_place(map),
         b: () => user_add_path(map),
         c: () => user_rev_path(map),
         d: () => user_get_path(map),
-        e: () => user_down_path(map)
+        e: () => download_map(map)
     }
 
     while(running) {
         choice = get_user_input(your_map_menu);
         if(quit(choice)) return false;
+    
 
-        if(actions[choice] !== undefined) {
+        if(choice === "e") {
+            
+            if(actions[choice]()) {
+
+                pause_screen();
+                return false;
+            }
+
+            pause_screen();
+
+        } else if(choice === "f") {
+
+            running = false;
+
+        } else if(choice !== undefined) {
 
             actions[choice]();
 
-        } else { running = false; }
+        } else {
+
+            running = false;
+        }
     }
 
     console.log(barrier);
     return true;
 }
 
-function jsn_to_Map(map: Map): boolean { //TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let user_map = prompt("YOUR MAP: ");
+function jsn_to_Map(map: Map): boolean { 
+    const res = upload_map();
 
-    //CHANGE THE MAP!!!!!!!!!!!!!!!!!!!!!!!!
-
-    return your_map(map);
+    if(typeof(res) === "boolean") return true;
+    
+    map = res;
+    return use_map(map);
 }
-
-function user_down_path(map: Map): void {} //TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 export function main_menu(map: Map): void {
     let running: boolean = true
+    let choice = get_user_input(mainMenu);
 
-    while(running) {
+    const actions: Record<string, () => boolean> = {
+        a: () => use_map(map),
+        b: () => jsn_to_Map(map)
+    }
 
-        let choice = get_user_input(mainMenu);
+    if(actions[choice] !== undefined) {
+
+        running = actions[choice]();
+
+            while(running) {
+
+        choice = get_user_input(alt_mainMenu);
         const actions: Record<string, () => boolean> = {
-            a: () => your_map(map),
-            b: () => jsn_to_Map(map)
+            a: () => use_map(make_map()),
+            b: () => use_map(map),
+            c: () => jsn_to_Map(map)
         }
 
         if(actions[choice] !== undefined) {
@@ -273,4 +312,10 @@ export function main_menu(map: Map): void {
             return;
         }
     }
+
+    } else {
+
+        return;
+    }
 }
+

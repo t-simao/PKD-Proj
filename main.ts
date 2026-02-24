@@ -5,4 +5,4 @@ process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()
 let map = make_map();
 
 main_menu(map);
-console.log(map);
+process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()

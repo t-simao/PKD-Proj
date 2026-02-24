@@ -10,10 +10,24 @@ export const mainMenu: Menu = {
     |--------------------------|
     |  A) New Map              |
     |  B) Upload a Map         |
-    |  C) Quit                 |
+    |  q) Quit                 |
     ============================
 `,
-    options: ["a", "b", "c"]
+    options: ["a", "b", "q"]
+};
+
+export const alt_mainMenu: Menu = {
+    menu: `
+    ============================
+    |   Welcome To PATHLY :)   |
+    |--------------------------|
+    |  A) New Map              |
+    |  B) Countinue            |
+    |  C) Upload a Map         |
+    |  q) Quit                 |
+    ============================
+`,
+    options: ["a", "b", "c", "q"]
 };
 
 export const mode_menu: Menu = { menu: `
@@ -82,8 +96,25 @@ export const adding_path: string = `
 
 export const removing_path: string = `
     ============================
-    |       Removing Path      |
+    |      Removing Path       |
     ============================
 `;
 
+export const downloading_map: string = `
+    ============================
+    |     Downloading Map      |
+    ============================
+`;
+
+export const uploading_map: string = `
+    ============================
+    |      Uploading Map       |
+    ============================
+`;
+
+export const path_banner: string = `
+    ============================
+    |        Your Path         |
+    ============================
+`;
 export const barrier: string = "-----------------------------------------";

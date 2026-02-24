@@ -72,12 +72,6 @@ function helper_add_path(map: Map, idx: number, path: Edge): void {
     map.adj[idx] = pair(path, map.adj[idx]);
 }
 
-function get_dst(map: Map, edge: Edge): string {
-
-    const dst = map.nodes[edge.to]
-    return dst.name;
-}
-
 export function get_node_ht(map: Map, place: string): Node | undefined {
 
     return ph_lookup(map.places, place);;
@@ -97,6 +91,11 @@ export function get_name(node: Node): string {
 
     return node.name;
 }
+export function get_type(edge: Edge): string {
+
+    return edge.type;
+}
+
 export function get_name_by_id(map: Map, id: number): string {
 
     const arr = map.nodes;
@@ -179,7 +178,6 @@ export function add_place(map: Map, name: string, floor: number): number {
         map.nodes[idx] = node;
         map.size = map.size + 1;
 
-        console.log(name);
         console.log(`${name} was added to floor number ${floor}`)
         
         return 0;
@@ -191,6 +189,12 @@ export function add_path(map: Map, from: string, type: Pathway_type, to: string)
 
     const src = get_node_ht(map, from);
     const dst = get_node_ht(map, to);
+
+    if(from === to ) {
+
+        console.log(`A path cannot start and end at the same location!!`)
+        return -1;
+    }
 
     if(src === undefined) {
 

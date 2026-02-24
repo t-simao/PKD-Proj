@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.barrier = exports.removing_path = exports.adding_path = exports.adding_place = exports.getting_path = exports.pathways_menu = exports.your_map_menu = exports.mode_menu = exports.mainMenu = void 0;
+exports.barrier = exports.path_banner = exports.uploading_map = exports.downloading_map = exports.removing_path = exports.adding_path = exports.adding_place = exports.getting_path = exports.pathways_menu = exports.your_map_menu = exports.mode_menu = exports.alt_mainMenu = exports.mainMenu = void 0;
 exports.mainMenu = {
-    menu: "\n    ============================\n    |   Welcome To PATHLY :)   |\n    |--------------------------|\n    |  A) New Map              |\n    |  B) Upload a Map         |\n    |  C) Quit                 |\n    ============================\n",
-    options: ["a", "b", "c"]
+    menu: "\n    ============================\n    |   Welcome To PATHLY :)   |\n    |--------------------------|\n    |  A) New Map              |\n    |  B) Upload a Map         |\n    |  q) Quit                 |\n    ============================\n",
+    options: ["a", "b", "q"]
+};
+exports.alt_mainMenu = {
+    menu: "\n    ============================\n    |   Welcome To PATHLY :)   |\n    |--------------------------|\n    |  A) New Map              |\n    |  B) Countinue            |\n    |  C) Upload a Map         |\n    |  q) Quit                 |\n    ============================\n",
+    options: ["a", "b", "c", "q"]
 };
 exports.mode_menu = { menu: "\n    =====================================\n    |               Mode                |\n    |-----------------------------------|\n    |  A) Wheelchair - (Avoid Stairs)   |\n    |  B) Quite - (Avoid Crowded Places)|\n    |  C) Cardio - (Avoid Elevators)    |\n    |  D) None                          |\n    =====================================\n",
     options: ["a", "b", "c", "d"] };
@@ -14,5 +18,8 @@ exports.pathways_menu = { menu: "\n    ===================================\n    
 exports.getting_path = "\n    ============================\n    |       Getting Path       |\n    ============================\n";
 exports.adding_place = "\n    ============================\n    |       Adding Place       |\n    ============================\n";
 exports.adding_path = "\n    ============================\n    |       Adding Path        |\n    ============================\n";
-exports.removing_path = "\n    ============================\n    |       Removing Path      |\n    ============================\n";
+exports.removing_path = "\n    ============================\n    |      Removing Path       |\n    ============================\n";
+exports.downloading_map = "\n    ============================\n    |     Downloading Map      |\n    ============================\n";
+exports.uploading_map = "\n    ============================\n    |      Uploading Map       |\n    ============================\n";
+exports.path_banner = "\n    ============================\n    |        Your Path         |\n    ============================\n";
 exports.barrier = "-----------------------------------------";

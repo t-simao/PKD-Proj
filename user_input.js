@@ -4,6 +4,10 @@ exports.invalid = invalid;
 exports.is_valid = is_valid;
 exports.get_user_input = get_user_input;
 exports.extra_opt_menu = extra_opt_menu;
+exports.banner = banner;
+exports.pause_screen = pause_screen;
+exports.quit_banner = quit_banner;
+exports.quit = quit;
 exports.user_add_path = user_add_path;
 exports.user_rev_path = user_rev_path;
 exports.user_get_path = user_get_path;
@@ -13,6 +17,7 @@ var prompt = promptSync();
 var building_1 = require("./lib/building");
 var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
 var menus_1 = require("./menus");
+var read_write_1 = require("./lib/read_write");
 function isOnlyNumbers(str) {
     return /^\d+$/.test(str);
 }
@@ -65,14 +70,12 @@ function banner(str) {
     process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()
     console.log(menus_1.barrier);
     console.log(str);
+    quit_banner();
 }
 function pause_screen() {
     console.log(menus_1.barrier);
     console.log();
     enter();
-    console.log();
-    console.log(menus_1.barrier);
-    console.log();
 }
 function enter() {
     prompt("Press enter to continue ↵");
@@ -89,7 +92,6 @@ function quit(str) {
 }
 function user_add_place(map) {
     banner(menus_1.adding_place);
-    quit_banner();
     var name = prompt("Name: ");
     if (quit(name))
         return;
@@ -104,6 +106,7 @@ function user_add_place(map) {
             return;
     }
     var floor = parseInt(floorStr);
+    console.log();
     (0, building_1.add_place)(map, name, floor);
     pause_screen();
 }
@@ -112,7 +115,6 @@ function isPathwayType(str) {
 }
 function user_add_path(map) {
     banner(menus_1.adding_path);
-    quit_banner();
     var from = prompt("From: ");
     if (quit(from))
         return;
@@ -127,29 +129,31 @@ function user_add_path(map) {
     var choice = extra_opt_menu(menus_1.pathways_menu);
     if (quit(choice))
         return;
+    console.log(menus_1.barrier);
     var user_type = allTypes[choice];
     if (isPathwayType(user_type)) {
         console.log();
         var to = prompt("To: ");
+        console.log(menus_1.barrier);
         (0, building_1.add_path)(map, from, user_type, to);
     }
     pause_screen();
 }
 function user_rev_path(map) {
     banner(menus_1.removing_path);
-    quit_banner();
     var from = prompt("From: ");
     if (quit(from))
         return;
     var to = prompt("To: ");
     if (quit(to))
         return;
+    console.log();
+    console.log(menus_1.barrier);
     (0, building_1.rev_path)(map, from, to);
     pause_screen();
 }
 function user_get_path(map) {
     banner(menus_1.getting_path);
-    quit_banner();
     var from = prompt("From: ");
     if (quit(from))
         return;
@@ -166,14 +170,22 @@ function user_get_path(map) {
     if (quit(choice))
         return;
     if (choice === "d") {
+        console.log();
+        console.log(menus_1.path_banner);
+        console.log();
+        console.log(menus_1.barrier);
         (0, Dijkstra_Alg_1.get_path)(map, from, to);
     }
     else {
+        console.log();
+        console.log(menus_1.path_banner);
+        console.log();
+        console.log(menus_1.barrier);
         (0, Dijkstra_Alg_1.get_path)(map, from, to, paths[choice]);
     }
     pause_screen();
 }
-function your_map(map) {
+function use_map(map) {
     var running = true;
     var choice = "";
     var actions = {
@@ -181,13 +193,23 @@ function your_map(map) {
         b: function () { return user_add_path(map); },
         c: function () { return user_rev_path(map); },
         d: function () { return user_get_path(map); },
-        e: function () { return user_down_path(map); }
+        e: function () { return (0, read_write_1.download_map)(map); }
     };
     while (running) {
         choice = get_user_input(menus_1.your_map_menu);
         if (quit(choice))
             return false;
-        if (actions[choice] !== undefined) {
+        if (choice === "e") {
+            if (actions[choice]()) {
+                pause_screen();
+                return false;
+            }
+            pause_screen();
+        }
+        else if (choice === "f") {
+            running = false;
+        }
+        else if (choice !== undefined) {
             actions[choice]();
         }
         else {
@@ -198,24 +220,37 @@ function your_map(map) {
     return true;
 }
 function jsn_to_Map(map) {
-    var user_map = prompt("YOUR MAP: ");
-    //CHANGE THE MAP!!!!!!!!!!!!!!!!!!!!!!!!
-    return your_map(map);
+    var res = (0, read_write_1.upload_map)();
+    if (typeof (res) === "boolean")
+        return true;
+    map = res;
+    return use_map(map);
 }
-function user_down_path(map) { } //TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function main_menu(map) {
     var running = true;
-    while (running) {
-        var choice = get_user_input(menus_1.mainMenu);
-        var actions = {
-            a: function () { return your_map(map); },
-            b: function () { return jsn_to_Map(map); }
-        };
-        if (actions[choice] !== undefined) {
-            running = actions[choice]();
+    var choice = get_user_input(menus_1.mainMenu);
+    var actions = {
+        a: function () { return use_map(map); },
+        b: function () { return jsn_to_Map(map); }
+    };
+    if (actions[choice] !== undefined) {
+        running = actions[choice]();
+        while (running) {
+            choice = get_user_input(menus_1.alt_mainMenu);
+            var actions_1 = {
+                a: function () { return use_map((0, building_1.make_map)()); },
+                b: function () { return use_map(map); },
+                c: function () { return jsn_to_Map(map); }
+            };
+            if (actions_1[choice] !== undefined) {
+                running = actions_1[choice]();
+            }
+            else {
+                return;
+            }
         }
-        else {
-            return;
-        }
+    }
+    else {
+        return;
     }
 }
