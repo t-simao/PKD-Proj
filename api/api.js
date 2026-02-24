@@ -74,21 +74,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
-var building_1 = require("./lib/building");
-var testing_1 = require("./testing");
+var building_1 = require("../lib/building");
+var functions_1 = require("./functions");
 var express_1 = __importDefault(require("express"));
+var cors_1 = __importDefault(require("cors"));
 var PORT = process.env.SR_PORT || 9000;
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+app.get("/maps/get/all", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var maps;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, functions_1.getAll)()];
+            case 1:
+                maps = _a.sent();
+                if (!maps)
+                    return [2 /*return*/, res.status(404).json({ error: "NOOOO!" })];
+                res.json(maps);
+                return [2 /*return*/];
+        }
+    });
+}); });
 app.get("/maps/get/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var map;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, testing_1.findMap)(req.params.id)];
+            case 0:
+                if (typeof req.params.id !== "string") {
+                    return [2 /*return*/, res.status(400).json({ error: "Wrong format information" })];
+                }
+                return [4 /*yield*/, (0, functions_1.findMap)(req.params.id)];
             case 1:
                 map = _a.sent();
                 if (!map)
-                    return [2 /*return*/, res.status(404).json({ error: "Not found" })];
+                    return [2 /*return*/, res.status(404).json({ error: "NOOOO!" })];
                 res.json(map);
                 return [2 /*return*/];
         }
@@ -98,11 +118,35 @@ app.post("/maps/create/:id", function (req, res) { return __awaiter(void 0, void
     var map;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, testing_1.createMap)(req.params.id, (0, building_1.make_map)())];
+            case 0:
+                if (typeof req.params.id !== "string") {
+                    return [2 /*return*/, res.status(400).json({ error: "Wrong format information" })];
+                }
+                return [4 /*yield*/, (0, functions_1.createMap)(req.params.id, (0, building_1.make_map)())];
             case 1:
                 map = _a.sent();
                 if (!map)
-                    return [2 /*return*/, res.status(404).json({ error: "Failed to create" })];
+                    return [2 /*return*/, res.status(404).json({ error: "FAIL!" })];
+                res.json(map);
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.post("/maps/update/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, new_map, map;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                new_map = req.body.map;
+                if (typeof id !== "string") {
+                    return [2 /*return*/, res.status(400).json({ error: "Wrong format information" })];
+                }
+                return [4 /*yield*/, (0, functions_1.UpdateMap)(id, new_map)];
+            case 1:
+                map = _a.sent();
+                if (!map)
+                    return [2 /*return*/, res.status(404).json({ error: "FAIL!" })];
                 res.json(map);
                 return [2 /*return*/];
         }

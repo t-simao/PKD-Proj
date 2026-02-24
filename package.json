@@ -4,16 +4,20 @@
   "description": "Shortest path project for PKD course",
   "main": "Dijkstra_Alg.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "server": "tsc --strict --esModuleInterop api/api.ts && node api/api.js",
+    "main": "tsc --strict --esModuleInterop main.ts"
   },
   "dependencies": {
     "@types/node": "^25.3.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mongodb": "^7.1.0",
     "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/prompt-sync": "^4.2.3",

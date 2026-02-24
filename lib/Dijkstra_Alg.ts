@@ -3,7 +3,7 @@ import { type Prio_Queue, empty, is_empty as pq_is_empty, head as pq_head,
 import { build_array } from './graphs';
 import { head, tail} from './list';
 
-import {map, type Map, get_node_ht, get_id, get_name_by_id } from './building'
+import { type Map, get_node_ht, get_id, get_name_by_id } from './building'
 
 type Path_Info = {
 
@@ -11,7 +11,7 @@ type Path_Info = {
     pathTypes: Array<string>,
 }
 
-function dijkstra(map: Map, srcIdx: number, dstIdx: number, skip_stairs: boolean = false): Path_Info {
+function dijkstra(map: Map, srcIdx: number, dstIdx: number, to_avoid: string): Path_Info {
     const pending: Prio_Queue<number> = empty();
     const distance: Array<number> = build_array(map.size, _ => Infinity);
 
@@ -42,7 +42,7 @@ function dijkstra(map: Map, srcIdx: number, dstIdx: number, skip_stairs: boolean
             const path = head(adjList);
             let cost = path.weight;
             
-            if(skip_stairs && path.type === "Stairs") { cost = Infinity};
+            if(path.type === to_avoid) { cost = Infinity};
             const pathDst = path.to; //Idx of the node the path leads to
 
             if(distance[pathDst] > distance[current] + cost) {
@@ -71,7 +71,7 @@ function dijkstra(map: Map, srcIdx: number, dstIdx: number, skip_stairs: boolean
 
 }*/
 
-export function shortest_path(map: Map, from: string, to: string, skip_stairs: boolean = false): number | void {
+export function get_path(map: Map, from: string, to: string, to_avoid: string = ""): number | void {
     const src = get_node_ht(map, from); //Lookup by string (name)
     const dst = get_node_ht(map, to); //Lookup by string (name)
 
@@ -94,7 +94,7 @@ export function shortest_path(map: Map, from: string, to: string, skip_stairs: b
         const srcIdx = get_id(src);
         const dstIdx = get_id(dst);
 
-        const pathInfo = dijkstra(map, srcIdx, dstIdx, skip_stairs);
+        const pathInfo = dijkstra(map, srcIdx, dstIdx, to_avoid);
         const parents = pathInfo.parents;
         const pathTypes = pathInfo.pathTypes;
 
@@ -146,16 +146,3 @@ export function shortest_path(map: Map, from: string, to: string, skip_stairs: b
         }
     }
 }
-
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Entrance","Library");
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Library","Café");
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Entrance","Lounge");
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Entrance","ConferenceRoom", true);
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Library","Library");
-// console.log("------------------------- PATH -------------------------");
-// shortest_path(map,"Moon","Library");

@@ -69,65 +69,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.map = void 0;
 exports.createMap = createMap;
+exports.reMap = reMap;
 exports.findMap = findMap;
 exports.UpdateMap = UpdateMap;
-exports.addPlace = addPlace;
+exports.getAll = getAll;
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
-var db_1 = require("./db/db");
-var building_1 = require("./lib/building");
-var list_1 = require("./lib/list");
-var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
-exports.map = (0, building_1.make_map)();
-// ---------- FLOOR 1 ----------
-(0, building_1.add_place)(exports.map, "Entrance", 1); //0
-(0, building_1.add_place)(exports.map, "Reception", 1); //1
-(0, building_1.add_place)(exports.map, "Library", 1); //2
-(0, building_1.add_place)(exports.map, "Café", 1); //3
-(0, building_1.add_place)(exports.map, "HallA", 1); //4
-(0, building_1.add_place)(exports.map, "Stairs1", 1); //5
-(0, building_1.add_place)(exports.map, "Elevator1", 1); //6
-// ---------- FLOOR 2 ----------
-(0, building_1.add_place)(exports.map, "HallB", 2); //7
-(0, building_1.add_place)(exports.map, "ComputerLab", 2); //8
-(0, building_1.add_place)(exports.map, "StudyRoom", 2); //9
-(0, building_1.add_place)(exports.map, "Lounge", 2); //10
-(0, building_1.add_place)(exports.map, "Stairs2", 2); //11
-(0, building_1.add_place)(exports.map, "Elevator2", 2); //12
-// ---------- FLOOR 3 ----------
-(0, building_1.add_place)(exports.map, "HallC", 3); //13
-(0, building_1.add_place)(exports.map, "OfficeA", 3); //14
-(0, building_1.add_place)(exports.map, "OfficeB", 3); //15
-(0, building_1.add_place)(exports.map, "ConferenceRoom", 3); //16
-(0, building_1.add_place)(exports.map, "Stairs3", 3); //17
-(0, building_1.add_place)(exports.map, "Elevator3", 3); //18
-(0, building_1.add_edge)(exports.map, "Entrance", "Hallway_S", "Reception");
-(0, building_1.add_edge)(exports.map, "Reception", "Hallway_L", "HallA");
-(0, building_1.add_edge)(exports.map, "HallA", "Hallway_S", "Library");
-(0, building_1.add_edge)(exports.map, "HallA", "Hallway_L", "Café");
-(0, building_1.add_edge)(exports.map, "HallA", "Hallway_L", "Stairs1");
-(0, building_1.add_edge)(exports.map, "HallA", "Hallway_S", "Elevator1");
-(0, building_1.add_edge)(exports.map, "HallB", "Hallway_L", "ComputerLab");
-(0, building_1.add_edge)(exports.map, "HallB", "Hallway_S", "StudyRoom");
-(0, building_1.add_edge)(exports.map, "HallB", "Hallway_L", "Lounge");
-(0, building_1.add_edge)(exports.map, "HallC", "Hallway_S", "OfficeA");
-(0, building_1.add_edge)(exports.map, "HallC", "Hallway_L", "OfficeB");
-(0, building_1.add_edge)(exports.map, "HallC", "Hallway_L", "ConferenceRoom");
-(0, building_1.add_edge)(exports.map, "HallC", "Hallway_L", "Elevator3");
-(0, building_1.add_edge)(exports.map, "Stairs1", "Stairs", "Stairs2");
-(0, building_1.add_edge)(exports.map, "Stairs2", "Stairs", "Stairs3");
-(0, building_1.add_edge)(exports.map, "Elevator1", "Elevator", "Elevator2");
-(0, building_1.add_edge)(exports.map, "Elevator2", "Elevator", "Elevator3");
-(0, building_1.add_edge)(exports.map, "Stairs2", "Hallway_L", "HallB");
-(0, building_1.add_edge)(exports.map, "Elevator2", "Hallway_L", "HallB");
-(0, building_1.add_edge)(exports.map, "Stairs3", "Hallway_S", "HallC");
-// shortest_path(map, "Entrance", "ConferenceRoom")
-// console.log("---------------------------------------s")
+var db_1 = require("../db/db");
+var building_1 = require("../lib/building");
+var list_1 = require("../lib/list");
 function createMap(id, map) {
     return __awaiter(this, void 0, void 0, function () {
-        var db, maps, res;
+        var db, maps, get_map;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
@@ -139,12 +93,18 @@ function createMap(id, map) {
                             map: map
                         })];
                 case 2:
-                    res = _a.sent();
-                    return [2 /*return*/, res];
+                    _a.sent();
+                    return [4 /*yield*/, maps.findOne({ _id: id, })];
+                case 3:
+                    get_map = _a.sent();
+                    if (!get_map)
+                        return [2 /*return*/];
+                    return [2 /*return*/, { _id: get_map._id, map: get_map.map }];
             }
         });
     });
 }
+// Helper that rebuild the map
 function reMap(map) {
     var newMap = (0, building_1.make_map)();
     for (var _i = 0, _a = map.nodes; _i < _a.length; _i++) {
@@ -158,7 +118,7 @@ function reMap(map) {
         while (!(0, list_1.is_null)(li)) {
             var f = (0, list_1.head)(li);
             var name_to = map.nodes[f.to].name;
-            (0, building_1.add_edge)(newMap, name_1, f.type, name_to);
+            (0, building_1.add_path)(newMap, name_1, f.type, name_to);
             li = (0, list_1.tail)(li);
         }
         i++;
@@ -167,7 +127,7 @@ function reMap(map) {
 }
 function findMap(id) {
     return __awaiter(this, void 0, void 0, function () {
-        var db, maps, res, newMap;
+        var db, maps, res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
@@ -179,15 +139,14 @@ function findMap(id) {
                     res = _a.sent();
                     if (!res || res.map === undefined)
                         return [2 /*return*/];
-                    newMap = reMap(res.map);
-                    return [2 /*return*/, { _id: res._id, map: newMap }];
+                    return [2 /*return*/, { _id: res._id, map: res.map }];
             }
         });
     });
 }
 function UpdateMap(id, map) {
     return __awaiter(this, void 0, void 0, function () {
-        var db, maps;
+        var db, maps, res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
@@ -195,58 +154,76 @@ function UpdateMap(id, map) {
                     db = _a.sent();
                     maps = db.collection("maps");
                     return [4 /*yield*/, maps.updateOne({ _id: id }, { $set: { map: map } })];
-                case 2: return [2 /*return*/, _a.sent()];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, maps.findOne({ _id: id, })];
+                case 3:
+                    res = _a.sent();
+                    if (!res || res.map === undefined)
+                        return [2 /*return*/];
+                    return [2 /*return*/, { _id: res._id, map: res.map }];
             }
         });
     });
 }
-function addPlace(id, name, floor) {
+function getAll() {
     return __awaiter(this, void 0, void 0, function () {
-        var db, maps, map;
+        var db, maps, res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.connectDB)()];
                 case 1:
                     db = _a.sent();
                     maps = db.collection("maps");
-                    return [4 /*yield*/, findMap(id)];
+                    return [4 /*yield*/, maps.find().toArray()];
                 case 2:
-                    map = _a.sent();
-                    if (!map)
-                        return [2 /*return*/];
-                    (0, building_1.add_place)(map.map, name, floor);
-                    return [4 /*yield*/, maps.updateOne({ _id: id }, { $set: { map: map.map } })];
-                case 3: return [2 /*return*/, _a.sent()];
+                    res = _a.sent();
+                    return [2 /*return*/, res];
             }
         });
     });
 }
-addPlace('building 2', 'megaChurch', 99);
-function main() {
-    return __awaiter(this, void 0, void 0, function () {
-        var b;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, findMap("Building 1")];
-                case 1:
-                    b = _a.sent();
-                    if (b === null || b === undefined)
-                        return [2 /*return*/];
-                    (0, Dijkstra_Alg_1.shortest_path)(b.map, "Entrance", "ConferenceRoom");
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-// main()
-//db.users.findOne({ name: “Arafat” })
-//db.maps.updateOne({ _id: "Arafat" }, { $set: { map: map } })
-/**
- * fetch building
- * building_id = adwad
- * let building = findbyid(building_id)
- * ad_eddge(building)
- *
- * updateone(building, map: building)
- */
-// createMap(map);
+// export const map = make_map();
+// // ---------- FLOOR 1 ----------
+// add_place(map, "Entrance", 1);      //0
+// add_place(map, "Reception", 1);     //1
+// add_place(map, "Library", 1);       //2
+// add_place(map, "Café", 1);          //3
+// add_place(map, "HallA", 1);         //4
+// add_place(map, "Stairs1", 1);       //5
+// add_place(map, "Elevator1", 1);     //6
+// // ---------- FLOOR 2 ----------
+// add_place(map, "HallB", 2);         //7
+// add_place(map, "ComputerLab", 2);   //8
+// add_place(map, "StudyRoom", 2);     //9
+// add_place(map, "Lounge", 2);        //10
+// add_place(map, "Stairs2", 2);       //11
+// add_place(map, "Elevator2", 2);     //12
+// // ---------- FLOOR 3 ----------
+// add_place(map, "HallC", 3);         //13
+// add_place(map, "OfficeA", 3);       //14
+// add_place(map, "OfficeB", 3);       //15
+// add_place(map, "ConferenceRoom", 3);//16
+// add_place(map, "Stairs3", 3);       //17
+// add_place(map, "Elevator3", 3);     //18
+// add_path(map,"Entrance",'hallway_S',"Reception");
+// add_path(map,"Reception","hallway_L","HallA");
+// add_path(map,"HallA","hallway_S","Library");
+// add_path(map,"HallA","hallway_L","Café");
+// add_path(map,"HallA","hallway_L","Stairs1");
+// add_path(map,"HallA","hallway_S","Elevator1");
+// add_path(map,"HallB","hallway_L","ComputerLab");
+// add_path(map,"HallB","hallway_S","StudyRoom");
+// add_path(map,"HallB","hallway_L","Lounge");
+// add_path(map,"HallC","hallway_S","OfficeA");
+// add_path(map,"HallC","hallway_L","OfficeB");
+// add_path(map,"HallC","hallway_L","ConferenceRoom");
+// add_path(map,"HallC","hallway_L","Elevator3");
+// add_path(map,"Stairs1","stairs","Stairs2");
+// add_path(map,"Stairs2","stairs","Stairs3");
+// add_path(map,"Elevator1","elevator","Elevator2");
+// add_path(map,"Elevator2","elevator","Elevator3");
+// add_path(map,"Stairs2","hallway_L","HallB");
+// add_path(map,"Elevator2","hallway_L","HallB");
+// add_path(map,"Stairs3","hallway_S","HallC");
+// UpdateMap('building 5', map);
