@@ -1,6 +1,6 @@
 import { Map } from "./lib/building";
 
-const api_url = "http://127.0.0.1:9000/maps";
+const api_url = "https://server-alpha-coral-83.vercel.app/maps";
 
 export async function fetchBuilding(id: string): Promise<Map | null> {
     try {

@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchBuilding = fetchBuilding;
 exports.createBuilding = createBuilding;
 exports.saveTheBuilding = saveTheBuilding;
-var api_url = "http://127.0.0.1:9000/maps";
+var api_url = "https://server-alpha-coral-83.vercel.app/maps";
 function fetchBuilding(id) {
     return __awaiter(this, void 0, void 0, function () {
         var res, data, e_1;
