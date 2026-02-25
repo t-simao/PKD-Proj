@@ -1,10 +1,12 @@
 import { barrier, downloading_map, uploading_map } from "./menus";
 import { banner, pause_screen, quit, restart_map} from "./helpers_userInput";
-import { Map, Pathway_type, add_path, add_place, get_name_by_id,} from "./building";
-import {head, tail } from "./list";
+import { Map, Pathway_type, add_path, add_place, get_name_by_id, make_map} from "./building";
+import {head, tail, is_null } from "./list";
+import { createBuilding, fetchBuilding,  } from "../apiCalls";
 
 import * as fs from "fs";
 import * as promptsync from "prompt-sync";
+import { use_map } from "../user_input";
 const prompt = promptsync();
 
 type json_path = {
@@ -187,3 +189,7 @@ export function upload_map(map: Map): void | boolean {
         }
     }
 }
+
+//DATA BASE:
+
+

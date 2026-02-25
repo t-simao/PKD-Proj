@@ -4,15 +4,20 @@ const prompt = promptSync();
 import { add_place, add_path, rev_path, type Map, type Pathway_type, make_map} from './lib/building';
 import { get_path } from './lib/Dijkstra_Alg';
 import { adding_place, adding_path, removing_path, getting_path, mode_menu, your_map_menu, 
-    barrier, mainMenu, pathways_menu, path_banner, alt_mainMenu} from './lib/menus'
+    barrier, mainMenu, pathways_menu, path_banner, alt_mainMenu,
+    uploading_choices} from './lib/menus'
 import { download_map, upload_map } from './lib/read_write';
 import { banner, quit, isNumbers, pause_screen, isPathwayType, display_extra_opt_menu, 
     get_user_input, restart_map } from './lib/helpers_userInput';
+import { head, is_null, tail } from './lib/list';
+import { createBuilding, fetchBuilding, saveTheBuilding } from './apiCalls';
+
+let mapID = '';
+let map = make_map();
 
 function user_add_place(map: Map): void {
 
     banner(adding_place);
-    
 
     const name = prompt("Name: ");
 
@@ -128,7 +133,7 @@ export function user_get_path(map: Map): void {
     pause_screen();
 }
 
-function use_map(map: Map): boolean {
+export function use_map(map: Map): boolean {
 
     let running = true;
     let choice = "";
@@ -189,20 +194,45 @@ function new_map(map: Map): boolean {
     return use_map(map);
 }
 
-export function main_menu(): void {
-    let map = make_map();
+async function upload_choice(map: Map): Promise<boolean> {
 
+    let choice = "";
+    const actions: Record<string, () => boolean | Promise<Map | null>> = {
+        a: () => upload(map),
+        b: async () => await fetchBuilding(mapID)
+    }
+
+    choice = get_user_input(uploading_choices);
+
+    if(choice === "c") {
+
+        return false;
+
+    } else if(actions[choice] !== undefined) {
+
+        actions[choice]();
+
+    } else {
+
+        return false;
+    }
+
+    return true;
+
+}
+
+export async function main_menu(): Promise<void> {
     let running: boolean = true
     let choice = get_user_input(mainMenu);
 
-    const actions: Record<string, () => boolean> = {
+    const actions: Record<string, () => boolean | Promise<boolean>> = {
         a: () => use_map(map),
-        b: () => upload(map)
+        b: async () => await upload_choice(map)
     }
 
     if(actions[choice] !== undefined) {
 
-        running = actions[choice]();
+        running = await actions[choice]();
 
             while(running) {
 
@@ -228,3 +258,95 @@ export function main_menu(): void {
         return;
     }
 }
+
+
+//DATA BASE:
+export function reMap(map: Map): Map {
+    let newMap = make_map();
+
+    for (const node of map.nodes) {
+        add_place(newMap, node.name, node.floor);
+    }
+
+    let i = 0;
+    while (i < map.size) {
+        const name = map.nodes[i].name
+        let li = map.adj[i]
+        while(!is_null(li)){
+            const f = head(li);
+            const name_to = map.nodes[f.to].name
+            add_path(newMap, name, f.type, name_to)
+            li = tail(li)
+        }
+        i++
+    }
+
+    return newMap
+}
+
+
+/**
+ * takes an id from the user and fetches the building
+ * @returns boolean
+ */
+async function fetchTheBuilding(): Promise<boolean> {
+    let user_map = prompt("YOUR MAP: ");
+    if (quit(user_map)) return true;
+
+    console.log(`\Fetching map '${user_map}'...`);
+    const building = await fetchBuilding(user_map)
+
+    if (building) {
+        console.log("Map fetched")
+        mapID = user_map
+        map = reMap(building) 
+        return await use_map(map)
+    }
+
+    console.log("Failed to fetch Map")
+    pause_screen();
+    return true;
+}
+
+/**
+ * If id exixts, takes the edited map and ads it as the map for the id
+ * @param map the edited map
+ * @returns void
+ */
+async function saveBuildingChanges(map: Map): Promise<void> {
+    if (!mapID) {
+        pause_screen()
+        return
+    }
+
+    const save = await saveTheBuilding(mapID, map);
+    if (save) {
+        console.log('map saved')
+    } else {console.log('Failed to save')}
+
+    pause_screen()
+}
+
+/**
+ * Createsa new building in the database
+ * @returns boolean
+ */
+async function createNewBuilding(): Promise<boolean> { 
+    let user_map = prompt("YOUR MAP: ");
+    if (quit(user_map)) return true;
+
+    console.log(`\nCreating new map '${user_map}'...`);
+    const building = await createBuilding(user_map)
+
+    if (building) {
+        console.log("Map  created!");
+        mapID = user_map
+        map = reMap(building) 
+        return await use_map(map)
+    }
+
+    console.log("\nFailed to create map.");
+    pause_screen();
+    return true;
+}
+

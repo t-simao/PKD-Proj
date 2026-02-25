@@ -62,7 +62,7 @@ export const your_map_menu: Menu = { menu: `
 
 export const pathways_menu: Menu = { menu: `
     ===================================
-    |        Pathway types            |
+    |         Pathway types           |
     |---------------------------------|
     |  A) Hallway_C (Crowded Hallway) |
     |  B) Hallway_S (Small Hallway)   |
@@ -74,6 +74,19 @@ export const pathways_menu: Menu = { menu: `
     ===================================
 `,
     options: ["a", "b", "c", "d", "e", "f", "q"]
+};
+
+export const uploading_choices: Menu = { menu: `
+    ===================================
+    |           Uploading             |
+    |---------------------------------|
+    |  A) My Files                    |
+    |  B) Cloud                       |
+    |  C) Back                        |
+    |  q) Quit                        |
+    ===================================
+`,
+    options: ["a", "b", "c", "q"]
 };
 
 export const getting_path: string = `
