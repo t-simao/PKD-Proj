@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.restart_map = restart_map;
 exports.invalid = invalid;
 exports.is_valid = is_valid;
 exports.get_user_input = get_user_input;
@@ -18,8 +19,15 @@ var building_1 = require("./lib/building");
 var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
 var menus_1 = require("./menus");
 var read_write_1 = require("./lib/read_write");
+var hashtables_1 = require("./lib/hashtables");
 function isOnlyNumbers(str) {
     return /^\d+$/.test(str);
+}
+function restart_map(map) {
+    map.places = (0, hashtables_1.ph_empty)(15, hashtables_1.hash_id);
+    map.adj = [];
+    map.nodes = [];
+    map.size = 0;
 }
 function invalid() {
     console.log("Please enter a VALID option!!");
@@ -220,13 +228,13 @@ function use_map(map) {
     return true;
 }
 function jsn_to_Map(map) {
-    var res = (0, read_write_1.upload_map)();
+    var res = (0, read_write_1.upload_map)(map);
     if (typeof (res) === "boolean")
         return true;
-    map = res;
     return use_map(map);
 }
-function main_menu(map) {
+function main_menu() {
+    var map = (0, building_1.make_map)();
     var running = true;
     var choice = get_user_input(menus_1.mainMenu);
     var actions = {

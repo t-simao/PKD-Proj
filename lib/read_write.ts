@@ -1,6 +1,6 @@
-import { barrier, downloading_map, uploading_map } from "../menus";
-import { banner, pause_screen, quit} from "../user_input";
-import { Map, Pathway_type, add_path, add_place, get_name_by_id, make_map} from "./building";
+import { barrier, downloading_map, uploading_map } from "./menus";
+import { banner, pause_screen, quit, restart_map} from "./helpers_userInput";
+import { Map, Pathway_type, add_path, add_place, get_name_by_id,} from "./building";
 import {head, tail } from "./list";
 
 import * as fs from "fs";
@@ -92,9 +92,9 @@ function map_to_JSON(map: Map): string {
     return jsonData;
 }
 
-function JSON_to_map(data: json_map): Map {
+function JSON_to_map(map: Map, data: json_map): void {
 
-    const map = make_map();
+    restart_map(map);
 
     const places = data.Places;
     const count = places.length;
@@ -122,14 +122,11 @@ function JSON_to_map(data: json_map): Map {
             add_path(map, currPlace, pathType, dst);
         }
     }
-
-    return map;
 }
 
 export function download_map(map: Map): boolean {
 
     const jsonData = map_to_JSON(map);
-
 
     console.log();
     
@@ -150,7 +147,7 @@ export function download_map(map: Map): boolean {
             
             console.log(barrier)
 
-            return true;
+            return false;
 
         } catch {
             
@@ -160,7 +157,7 @@ export function download_map(map: Map): boolean {
     }
 }
 
-export function upload_map(): Map | boolean {
+export function upload_map(map: Map): void | boolean {
 
     while(true) {
 
@@ -173,7 +170,7 @@ export function upload_map(): Map | boolean {
 
         try {
             const JSON_data = fs.readFileSync(`${name}.json`, "utf8");
-            const map: json_map = JSON.parse(JSON_data);
+            const new_map: json_map = JSON.parse(JSON_data);
 
             console.log();
             console.log(banner(uploading_map));
@@ -181,7 +178,7 @@ export function upload_map(): Map | boolean {
 
             pause_screen();
 
-            return JSON_to_map(map);
+            return JSON_to_map(map, new_map);
             
         }
         catch {

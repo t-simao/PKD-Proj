@@ -1,104 +1,13 @@
 import * as promptSync from 'prompt-sync';
 const prompt = promptSync();
 
-import { add_place, add_path, rev_path, type Map, Pathway_type_arr, type Pathway_type, make_map} from './lib/building';
+import { add_place, add_path, rev_path, type Map, type Pathway_type, make_map} from './lib/building';
 import { get_path } from './lib/Dijkstra_Alg';
-import { adding_place, adding_path, removing_path, getting_path, mode_menu, type Menu, your_map_menu, 
-    barrier, mainMenu, pathways_menu, 
-    path_banner,
-    alt_mainMenu} from './menus'
-
+import { adding_place, adding_path, removing_path, getting_path, mode_menu, your_map_menu, 
+    barrier, mainMenu, pathways_menu, path_banner, alt_mainMenu} from './lib/menus'
 import { download_map, upload_map } from './lib/read_write';
-
-function isOnlyNumbers(str: string): boolean {
-  return /^\d+$/.test(str);
-}
-
-export function invalid(): void {
-    console.log("Please enter a VALID option!!");
-    console.log();
-
-    prompt("PRESS ANY KEY TO TRY AGAIN!!");
-}
-
-export function is_valid(arr: Array<string>, val: string): boolean {
-    return arr.includes(val)
-}
-
-export function get_user_input(menu: Menu): string {
-
-    let choice: string = "";
-    let running: boolean = true;
-
-    while(running) {
-        
-        process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()
-        console.log();
-        console.log(barrier);
-        console.log(menu.menu);
-
-        choice = prompt("CHOICE: ");
-        choice = choice.toLowerCase();
-
-        if(!is_valid(menu.options, choice)) { invalid(); }
-        else { running = false; }
-
-    }
-
-    return choice;
-}
-
-export function extra_opt_menu(menu: Menu): string {
-
-    let choice: string = "";
-    let running: boolean = true;
-
-    while(running) {
-        console.log();
-        console.log(barrier);
-        console.log(menu.menu);
-
-        choice = prompt("CHOICE: ");
-        choice = choice.toLowerCase();
-
-        if(!is_valid(menu.options, choice)) { invalid(); }
-        else { running = false; }
-    }
-
-    return choice;
-}
-
-export function banner(str: string): void {
-
-    process.stdout.write('\x1Bc'); //CLEARS THE TERMINAL LIKE CONSOLE.CLEAR()
-    console.log(barrier);
-    console.log(str);
-    quit_banner();
-}
-
-export function pause_screen(): void {
-
-    console.log(barrier);
-    console.log();
-
-    enter();
-}
-
-function enter(): void {
-    prompt("Press enter to continue ↵");
-}
-
-export function quit_banner(): void {
-    console.log(barrier);
-    console.log(`TYPE "q" to quit!!!`);
-    console.log(barrier);
-    console.log();
-}
-
-export function quit(str: string): boolean {
-    str = str.toLowerCase();
-    return str === "q" ? true : false;
-}
+import { banner, quit, isNumbers, pause_screen, isPathwayType, display_extra_opt_menu, 
+    get_user_input, restart_map } from './lib/helpers_userInput';
 
 function user_add_place(map: Map): void {
 
@@ -111,7 +20,7 @@ function user_add_place(map: Map): void {
     let floorStr = prompt("Floor: ");
     if(floorStr === "q") return;
 
-    while(!isOnlyNumbers(floorStr)) {
+    while(!isNumbers(floorStr)) {
 
         console.log();
         console.log("Plase enter a number: ")
@@ -126,10 +35,6 @@ function user_add_place(map: Map): void {
     console.log();
     add_place(map, name, floor);
     pause_screen();
-}
-
-function isPathwayType(str: string): str is Pathway_type {
-    return Pathway_type_arr.includes(str);
 }
 
 export function user_add_path(map: Map): void {
@@ -147,7 +52,7 @@ export function user_add_path(map: Map): void {
         f: "ramp"
     };
     
-    let choice = extra_opt_menu(pathways_menu);
+    let choice = display_extra_opt_menu(pathways_menu);
     if(quit(choice)) return;
 
     console.log(barrier);
@@ -193,7 +98,7 @@ export function user_get_path(map: Map): void {
 
     console.log();
 
-    const choice = extra_opt_menu(mode_menu);
+    const choice = display_extra_opt_menu(mode_menu);
 
     const paths: Record<string, Pathway_type> = {
         a: "stairs",
@@ -203,22 +108,18 @@ export function user_get_path(map: Map): void {
 
     if(quit(choice)) return;
 
-    if(choice === "d") {
-
         console.log();
         console.log(path_banner);
         console.log();
         
         console.log(barrier);
+
+    if(choice === "d") {
+
         get_path(map, from, to);
 
     } else {
 
-        console.log();
-        console.log(path_banner);
-        console.log();
-        
-        console.log(barrier);
         get_path(map, from, to, paths[choice]);
 
     }
@@ -272,22 +173,30 @@ function use_map(map: Map): boolean {
     return true;
 }
 
-function jsn_to_Map(map: Map): boolean { 
-    const res = upload_map();
+function upload(map: Map): boolean { 
+    const res = upload_map(map);
 
     if(typeof(res) === "boolean") return true;
     
-    map = res;
     return use_map(map);
 }
 
-export function main_menu(map: Map): void {
+function new_map(map: Map): boolean { 
+
+    restart_map(map)
+    
+    return use_map(map);
+}
+
+export function main_menu(): void {
+    let map = make_map();
+
     let running: boolean = true
     let choice = get_user_input(mainMenu);
 
     const actions: Record<string, () => boolean> = {
         a: () => use_map(map),
-        b: () => jsn_to_Map(map)
+        b: () => upload(map)
     }
 
     if(actions[choice] !== undefined) {
@@ -298,9 +207,9 @@ export function main_menu(map: Map): void {
 
         choice = get_user_input(alt_mainMenu);
         const actions: Record<string, () => boolean> = {
-            a: () => use_map(make_map()),
+            a: () => new_map(map),
             b: () => use_map(map),
-            c: () => jsn_to_Map(map)
+            c: () => upload(map)
         }
 
         if(actions[choice] !== undefined) {
@@ -318,4 +227,3 @@ export function main_menu(map: Map): void {
         return;
     }
 }
-

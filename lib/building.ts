@@ -14,7 +14,7 @@ export const Pathway_cost: Record<Pathway_type, number> = {
     stairs: 20 
 }
 
-type Node = {
+export type Node = {
     id: number;
     name: string
     floor: number;
