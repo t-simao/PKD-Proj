@@ -53,7 +53,6 @@ var building_1 = require("./lib/building");
 var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
 var menus_1 = require("./menus");
 var apiCalls_1 = require("./apiCalls");
-var functions_1 = require("./api/functions");
 var mapID = '';
 function isOnlyNumbers(str) {
     return /^\d+$/.test(str);
@@ -231,7 +230,7 @@ function your_map(map) {
                         d: function () { return user_get_path(map); },
                         e: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, save_changes(map)];
+                                case 0: return [4 /*yield*/, saveBuildingChanges(map)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); },
@@ -259,7 +258,11 @@ function your_map(map) {
         });
     });
 }
-function jsn_to_Map() {
+/**
+ * takes an id from the user and fetches the building
+ * @returns boolean
+ */
+function fetchTheBuilding() {
     return __awaiter(this, void 0, void 0, function () {
         var user_map, building, nice_building;
         return __generator(this, function (_a) {
@@ -268,23 +271,30 @@ function jsn_to_Map() {
                     user_map = prompt("YOUR MAP: ");
                     if (quit(user_map))
                         return [2 /*return*/, true];
+                    console.log("Fetching map '".concat(user_map, "'..."));
                     return [4 /*yield*/, (0, apiCalls_1.fetchBuilding)(user_map)];
                 case 1:
                     building = _a.sent();
                     if (!building) return [3 /*break*/, 3];
+                    console.log("Map fetched");
                     mapID = user_map;
-                    nice_building = (0, functions_1.reMap)(building);
+                    nice_building = (0, building_1.reMap)(building);
                     return [4 /*yield*/, your_map(nice_building)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    //CHANGE THE MAP!!!!!!!!!!!!!!!!!!!!!!!!
+                    console.log("Failed to fetch Map");
                     pause_screen();
                     return [2 /*return*/, true];
             }
         });
     });
 }
-function save_changes(map) {
+/**
+ * If id exixts, takes the edited map and ads it as the map for the id
+ * @param map the edited map
+ * @returns void
+ */
+function saveBuildingChanges(map) {
     return __awaiter(this, void 0, void 0, function () {
         var save;
         return __generator(this, function (_a) {
@@ -309,7 +319,11 @@ function save_changes(map) {
         });
     });
 }
-function new_thing() {
+/**
+ * Createsa new building in the database
+ * @returns boolean
+ */
+function createNewBuilding() {
     return __awaiter(this, void 0, void 0, function () {
         var user_map, building, nice_building;
         return __generator(this, function (_a) {
@@ -325,11 +339,10 @@ function new_thing() {
                     if (!building) return [3 /*break*/, 3];
                     console.log("Map  created!");
                     mapID = user_map;
-                    nice_building = (0, functions_1.reMap)(building);
+                    nice_building = (0, building_1.reMap)(building);
                     return [4 /*yield*/, your_map(nice_building)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    //CHANGE THE MAP!!!!!!!!!!!!!!!!!!!!!!!!
                     console.log("\nFailed to create map.");
                     pause_screen();
                     return [2 /*return*/, true];
@@ -350,8 +363,8 @@ function main_menu() {
                     if (!running) return [3 /*break*/, 5];
                     choice = get_user_input(menus_1.mainMenu);
                     actions = {
-                        a: function () { return new_thing(); },
-                        b: function () { return jsn_to_Map(); }
+                        a: function () { return createNewBuilding(); },
+                        b: function () { return fetchTheBuilding(); }
                     };
                     if (!(actions[choice] !== undefined)) return [3 /*break*/, 3];
                     return [4 /*yield*/, actions[choice]()];

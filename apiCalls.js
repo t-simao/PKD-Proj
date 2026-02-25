@@ -39,7 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchBuilding = fetchBuilding;
 exports.createBuilding = createBuilding;
 exports.saveTheBuilding = saveTheBuilding;
+// Server url
 var api_url = "https://server-alpha-coral-83.vercel.app/maps";
+/**
+ * Fetches a building from the database
+ * @param id the building id
+ * @returns the fetched building or null
+ */
 function fetchBuilding(id) {
     return __awaiter(this, void 0, void 0, function () {
         var res, data, e_1;
@@ -64,6 +70,11 @@ function fetchBuilding(id) {
         });
     });
 }
+/**
+ * Cretes a building in the database
+ * @param id the building id
+ * @returns the created building or null
+ */
 function createBuilding(id) {
     return __awaiter(this, void 0, void 0, function () {
         var res, data, e_2;
@@ -88,6 +99,12 @@ function createBuilding(id) {
         });
     });
 }
+/**
+ * Saves a building in the database
+ * @param id building id
+ * @param map the new map of the building
+ * @returns boolean
+ */
 function saveTheBuilding(id, map) {
     return __awaiter(this, void 0, void 0, function () {
         var res, e_3;

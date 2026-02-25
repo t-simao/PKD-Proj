@@ -1,4 +1,4 @@
-import { type List, pair, list, tail, head } from './list';
+import { type List, pair, list, tail, head, is_null } from './list';
 import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable } from './hashtables'
 
 // Data type definitions
@@ -261,4 +261,28 @@ export function rev_path(map: Map, from: string, to: string): number {
         return 0;
     }
     
+}
+
+// Helper that rebuild the map
+export function reMap(map: Map): Map {
+    let newMap = make_map();
+
+    for (const node of map.nodes) {
+        add_place(newMap, node.name, node.floor);
+    }
+
+    let i = 0;
+    while (i < map.size) {
+        const name = map.nodes[i].name
+        let li = map.adj[i]
+        while(!is_null(li)){
+            const f = head(li);
+            const name_to = map.nodes[f.to].name
+            add_path(newMap, name, f.type, name_to)
+            li = tail(li)
+        }
+        i++
+    }
+
+    return newMap
 }
