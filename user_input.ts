@@ -12,6 +12,7 @@ import { banner, quit, isNumbers, pause_screen, isPathwayType, display_extra_opt
 function user_add_place(map: Map): void {
 
     banner(adding_place);
+    
 
     const name = prompt("Name: ");
 
