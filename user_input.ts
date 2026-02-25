@@ -4,10 +4,11 @@ const prompt = promptSync();
 import { add_place, add_path, rev_path, type Map, Pathway_type_arr, type Pathway_type, reMap} from './lib/building';
 import { get_path } from './lib/Dijkstra_Alg';
 import { adding_place, adding_path, removing_path, getting_path, mode_menu, type Menu, your_map_menu, 
-    barrier, mainMenu, pathways_menu } from './menus'
+    barrier, mainMenu, pathways_menu, alt_menu } from './menus'
 import { fetchBuilding, createBuilding, saveTheBuilding } from './apiCalls';
 
 let mapID: string = ''
+let map: Map;
 
 function isOnlyNumbers(str: string): boolean {
   return /^\d+$/.test(str);
@@ -260,8 +261,8 @@ async function fetchTheBuilding(): Promise<boolean> {
     if (building) {
         console.log("Map fetched")
         mapID = user_map
-        const nice_building = reMap(building) 
-        return await your_map(nice_building)
+        map = reMap(building) 
+        return await your_map(map)
     }
 
     console.log("Failed to fetch Map")
@@ -302,8 +303,8 @@ async function createNewBuilding(): Promise<boolean> {
     if (building) {
         console.log("Map  created!");
         mapID = user_map
-        const nice_building = reMap(building) 
-        return await your_map(nice_building)
+        map = reMap(building) 
+        return await your_map(map)
     }
 
     console.log("\nFailed to create map.");
@@ -316,12 +317,23 @@ function user_down_path(map: Map): void {} //TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 export async function main_menu(): Promise<void> {
     let running: boolean = true
 
-    while(running) {
+    let choice = get_user_input(mainMenu);
+    const actions: Record<string, () => Promise<boolean>> = {
+        a: () => createNewBuilding(),
+        b: () => fetchTheBuilding()
+    }
 
-        let choice = get_user_input(mainMenu);
+    if(actions[choice] !== undefined) {
+
+        running = await actions[choice]();
+
+            while(running) {
+
+        choice = get_user_input(alt_menu);
         const actions: Record<string, () => Promise<boolean>> = {
             a: () => createNewBuilding(),
-            b: () => fetchTheBuilding()
+            b: () => your_map(map),
+            c: () => fetchTheBuilding()
         }
 
         if(actions[choice] !== undefined) {
@@ -332,5 +344,10 @@ export async function main_menu(): Promise<void> {
 
             return;
         }
+    }
+
+    } else {
+
+        return;
     }
 }

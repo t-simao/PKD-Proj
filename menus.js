@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.barrier = exports.removing_path = exports.adding_path = exports.adding_place = exports.getting_path = exports.pathways_menu = exports.your_map_menu = exports.mode_menu = exports.mainMenu = void 0;
+exports.barrier = exports.removing_path = exports.adding_path = exports.adding_place = exports.getting_path = exports.pathways_menu = exports.your_map_menu = exports.mode_menu = exports.alt_menu = exports.mainMenu = void 0;
 exports.mainMenu = {
     menu: "\n    ============================\n    |   Welcome To PATHLY :)   |\n    |--------------------------|\n    |  A) New Map              |\n    |  B) Upload a Map         |\n    |  C) Quit                 |\n    ============================\n",
     options: ["a", "b", "c"]
+};
+exports.alt_menu = {
+    menu: "\n    ============================\n    |   Welcome To PATHLY :)   |\n    |--------------------------|\n    |  A) New Map              |\n    |  B) Countinue            |\n    |  C) Upload a Map         |\n    |  q) Quit                 |\n    ============================\n",
+    options: ["a", "b", "c", "q"]
 };
 exports.mode_menu = { menu: "\n    =====================================\n    |               Mode                |\n    |-----------------------------------|\n    |  A) Wheelchair - (Avoid Stairs)   |\n    |  B) Quite - (Avoid Crowded Places)|\n    |  C) Cardio - (Avoid Elevators)    |\n    |  D) None                          |\n    =====================================\n",
     options: ["a", "b", "c", "d"] };

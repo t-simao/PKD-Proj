@@ -16,6 +16,20 @@ export const mainMenu: Menu = {
     options: ["a", "b", "c"]
 };
 
+export const alt_menu: Menu = {
+    menu: `
+    ============================
+    |   Welcome To PATHLY :)   |
+    |--------------------------|
+    |  A) New Map              |
+    |  B) Countinue            |
+    |  C) Upload a Map         |
+    |  q) Quit                 |
+    ============================
+`,
+    options: ["a", "b", "c", "q"]
+};
+
 export const mode_menu: Menu = { menu: `
     =====================================
     |               Mode                |
@@ -38,7 +52,7 @@ export const your_map_menu: Menu = { menu: `
     |  B) Add path             |
     |  C) Remove path          |
     |  D) Get Path             |
-    |  E) Save path            |
+    |  E) Save                 |
     |  F) Go Back              |
     |  q) Quit                 |
     ============================

@@ -54,6 +54,7 @@ var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
 var menus_1 = require("./menus");
 var apiCalls_1 = require("./apiCalls");
 var mapID = '';
+var map;
 function isOnlyNumbers(str) {
     return /^\d+$/.test(str);
 }
@@ -264,7 +265,7 @@ function your_map(map) {
  */
 function fetchTheBuilding() {
     return __awaiter(this, void 0, void 0, function () {
-        var user_map, building, nice_building;
+        var user_map, building;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -278,8 +279,8 @@ function fetchTheBuilding() {
                     if (!building) return [3 /*break*/, 3];
                     console.log("Map fetched");
                     mapID = user_map;
-                    nice_building = (0, building_1.reMap)(building);
-                    return [4 /*yield*/, your_map(nice_building)];
+                    map = (0, building_1.reMap)(building);
+                    return [4 /*yield*/, your_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
                     console.log("Failed to fetch Map");
@@ -325,7 +326,7 @@ function saveBuildingChanges(map) {
  */
 function createNewBuilding() {
     return __awaiter(this, void 0, void 0, function () {
-        var user_map, building, nice_building;
+        var user_map, building;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -339,8 +340,8 @@ function createNewBuilding() {
                     if (!building) return [3 /*break*/, 3];
                     console.log("Map  created!");
                     mapID = user_map;
-                    nice_building = (0, building_1.reMap)(building);
-                    return [4 /*yield*/, your_map(nice_building)];
+                    map = (0, building_1.reMap)(building);
+                    return [4 /*yield*/, your_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
                     console.log("\nFailed to create map.");
@@ -353,27 +354,39 @@ function createNewBuilding() {
 function user_down_path(map) { } //TO DO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function main_menu() {
     return __awaiter(this, void 0, void 0, function () {
-        var running, choice, actions;
+        var running, choice, actions, actions_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     running = true;
-                    _a.label = 1;
-                case 1:
-                    if (!running) return [3 /*break*/, 5];
                     choice = get_user_input(menus_1.mainMenu);
                     actions = {
                         a: function () { return createNewBuilding(); },
                         b: function () { return fetchTheBuilding(); }
                     };
-                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 3];
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 7];
                     return [4 /*yield*/, actions[choice]()];
-                case 2:
+                case 1:
                     running = _a.sent();
-                    return [3 /*break*/, 4];
-                case 3: return [2 /*return*/];
-                case 4: return [3 /*break*/, 1];
-                case 5: return [2 /*return*/];
+                    _a.label = 2;
+                case 2:
+                    if (!running) return [3 /*break*/, 6];
+                    choice = get_user_input(menus_1.alt_menu);
+                    actions_1 = {
+                        a: function () { return createNewBuilding(); },
+                        b: function () { return your_map(map); },
+                        c: function () { return fetchTheBuilding(); }
+                    };
+                    if (!(actions_1[choice] !== undefined)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, actions_1[choice]()];
+                case 3:
+                    running = _a.sent();
+                    return [3 /*break*/, 5];
+                case 4: return [2 /*return*/];
+                case 5: return [3 /*break*/, 2];
+                case 6: return [3 /*break*/, 8];
+                case 7: return [2 /*return*/];
+                case 8: return [2 /*return*/];
             }
         });
     });
