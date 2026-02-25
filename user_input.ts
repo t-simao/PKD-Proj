@@ -197,9 +197,9 @@ function new_map(map: Map): boolean {
 async function upload_choice(map: Map): Promise<boolean> {
 
     let choice = "";
-    const actions: Record<string, () => boolean | Promise<Map | null>> = {
+    const actions: Record<string, () => boolean | Promise<boolean>> = {
         a: () => upload(map),
-        b: async () => await fetchBuilding(mapID)
+        b: async () => await fetchTheBuilding()
     }
 
     choice = get_user_input(uploading_choices);
@@ -208,16 +208,14 @@ async function upload_choice(map: Map): Promise<boolean> {
 
         return false;
 
-    } else if(actions[choice] !== undefined) {
+    } else if(actions[choice] !== undefined){
 
-        actions[choice]();
+        return await actions[choice]();
 
     } else {
 
         return false;
     }
-
-    return true;
 
 }
 
@@ -245,7 +243,7 @@ export async function main_menu(): Promise<void> {
 
         if(actions[choice] !== undefined) {
 
-            running = actions[choice]();
+            running = await actions[choice]();
 
         } else {
 

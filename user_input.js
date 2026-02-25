@@ -190,27 +190,27 @@ function upload_choice(map) {
         var choice, actions;
         var _this = this;
         return __generator(this, function (_a) {
-            choice = "";
-            actions = {
-                a: function () { return upload(map); },
-                b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, (0, apiCalls_1.fetchBuilding)(mapID)];
-                        case 1: return [2 /*return*/, _a.sent()];
-                    }
-                }); }); }
-            };
-            choice = (0, helpers_userInput_1.get_user_input)(menus_1.uploading_choices);
-            if (choice === "c") {
-                return [2 /*return*/, false];
+            switch (_a.label) {
+                case 0:
+                    choice = "";
+                    actions = {
+                        a: function () { return upload(map); },
+                        b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, fetchTheBuilding()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }
+                    };
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.uploading_choices);
+                    if (!(choice === "c")) return [3 /*break*/, 1];
+                    return [2 /*return*/, false];
+                case 1:
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, actions[choice]()];
+                case 2: return [2 /*return*/, _a.sent()];
+                case 3: return [2 /*return*/, false];
             }
-            else if (actions[choice] !== undefined) {
-                actions[choice]();
-            }
-            else {
-                return [2 /*return*/, false];
-            }
-            return [2 /*return*/, true];
         });
     });
 }
@@ -232,27 +232,29 @@ function main_menu() {
                             }
                         }); }); }
                     };
-                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 2];
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 7];
                     return [4 /*yield*/, actions[choice]()];
                 case 1:
                     running = _a.sent();
-                    while (running) {
-                        choice = (0, helpers_userInput_1.get_user_input)(menus_1.alt_mainMenu);
-                        actions_1 = {
-                            a: function () { return new_map(map); },
-                            b: function () { return use_map(map); },
-                            c: function () { return upload(map); }
-                        };
-                        if (actions_1[choice] !== undefined) {
-                            running = actions_1[choice]();
-                        }
-                        else {
-                            return [2 /*return*/];
-                        }
-                    }
-                    return [3 /*break*/, 3];
-                case 2: return [2 /*return*/];
-                case 3: return [2 /*return*/];
+                    _a.label = 2;
+                case 2:
+                    if (!running) return [3 /*break*/, 6];
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.alt_mainMenu);
+                    actions_1 = {
+                        a: function () { return new_map(map); },
+                        b: function () { return use_map(map); },
+                        c: function () { return upload(map); }
+                    };
+                    if (!(actions_1[choice] !== undefined)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, actions_1[choice]()];
+                case 3:
+                    running = _a.sent();
+                    return [3 /*break*/, 5];
+                case 4: return [2 /*return*/];
+                case 5: return [3 /*break*/, 2];
+                case 6: return [3 /*break*/, 8];
+                case 7: return [2 /*return*/];
+                case 8: return [2 /*return*/];
             }
         });
     });

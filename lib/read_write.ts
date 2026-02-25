@@ -190,6 +190,4 @@ export function upload_map(map: Map): void | boolean {
     }
 }
 
-//DATA BASE:
-
 
