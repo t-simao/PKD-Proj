@@ -5,8 +5,7 @@
   "main": "Dijkstra_Alg.js",
   "scripts": {
     "test": "jest",
-    "server": "tsc --strict --esModuleInterop api/api.ts && node api/api.js",
-    "main": "tsc --strict --esModuleInterop main.ts"
+    "main": "tsc && node main.js"
   },
   "dependencies": {
     "@types/node": "^25.3.0",

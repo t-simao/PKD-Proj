@@ -1,4 +1,4 @@
-import { Map } from "./lib/building";
+import { Map } from "../lib/building";
 
 // Server url
 const api_url = "https://server-alpha-coral-83.vercel.app/maps";
@@ -26,9 +26,13 @@ export async function fetchBuilding(id: string): Promise<Map | null> {
  * @param id the building id
  * @returns the created building or null
  */
-export async function createBuilding(id: string): Promise<Map | null> {
+export async function createBuilding(id: string, map: Map): Promise<Map | null> {
     try {
-        const res = await fetch(`${api_url}/create/${id}`, {method: 'POST'})
+        const res = await fetch(`${api_url}/create/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'Application/json' },
+            body: JSON.stringify({ map })
+        })
         if (!res.ok) return null;
         const data = await res.json();
 

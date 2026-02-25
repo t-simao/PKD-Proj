@@ -1,0 +1,29 @@
+{
+   "Places": [
+      {
+         "from": "james",
+         "floor": 1,
+         "paths": []
+      },
+      {
+         "from": "king",
+         "floor": 1,
+         "paths": []
+      },
+      {
+         "from": "mike",
+         "floor": 2,
+         "paths": []
+      },
+      {
+         "from": "kik",
+         "floor": 2,
+         "paths": []
+      },
+      {
+         "from": "oim",
+         "floor": 3,
+         "paths": []
+      }
+   ]
+}

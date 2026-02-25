@@ -1,4 +1,4 @@
-import { main_menu } from './user_input';
+import { main_menu } from './helpers/user_input';
 
 
 async function start(): Promise<void> {

@@ -10,13 +10,13 @@ export const mainMenu: Menu = {
     |--------------------------|
     |  A) New Map              |
     |  B) Upload a Map         |
-    |  C) Quit                 |
+    |  q) Quit                 |
     ============================
 `,
-    options: ["a", "b", "c"]
+    options: ["a", "b", "q"]
 };
 
-export const alt_menu: Menu = {
+export const alt_mainMenu: Menu = {
     menu: `
     ============================
     |   Welcome To PATHLY :)   |
@@ -52,17 +52,17 @@ export const your_map_menu: Menu = { menu: `
     |  B) Add path             |
     |  C) Remove path          |
     |  D) Get Path             |
-    |  E) Save                 |
-    |  F) Go Back              |
+    |  E) save map             |
+    |  G) go back              |
     |  q) Quit                 |
     ============================
 `,
-    options: ["a", "b", "c", "d", "e", "f", "q"]
+    options: ["a", "b", "c", "d", "e", "f", "g", "q"]
 };
 
 export const pathways_menu: Menu = { menu: `
     ===================================
-    |        Pathway types            |
+    |         Pathway types           |
     |---------------------------------|
     |  A) Hallway_C (Crowded Hallway) |
     |  B) Hallway_S (Small Hallway)   |
@@ -74,6 +74,32 @@ export const pathways_menu: Menu = { menu: `
     ===================================
 `,
     options: ["a", "b", "c", "d", "e", "f", "q"]
+};
+
+export const uploading_choices: Menu = { menu: `
+    ===================================
+    |           Uploading             |
+    |---------------------------------|
+    |  A) My Files                    |
+    |  B) Cloud                       |
+    |  C) Back                        |
+    |  q) Quit                        |
+    ===================================
+`,
+    options: ["a", "b", "c", "q"]
+};
+
+export const save_choices: Menu = { menu: `
+    ===================================
+    |          Save/Download          |
+    |---------------------------------|
+    |  A) Save in the cloud           |
+    |  B) Download locally            |
+    |  C) Back                        |
+    |  q) Quit                        |
+    ===================================
+`,
+    options: ["a", "b", "c", "q"]
 };
 
 export const getting_path: string = `
@@ -96,8 +122,25 @@ export const adding_path: string = `
 
 export const removing_path: string = `
     ============================
-    |       Removing Path      |
+    |      Removing Path       |
     ============================
 `;
 
+export const downloading_map: string = `
+    ============================
+    |     Downloading Map      |
+    ============================
+`;
+
+export const uploading_map: string = `
+    ============================
+    |      Uploading Map       |
+    ============================
+`;
+
+export const path_banner: string = `
+    ============================
+    |        Your Path         |
+    ============================
+`;
 export const barrier: string = "-----------------------------------------";
