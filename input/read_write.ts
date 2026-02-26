@@ -1,12 +1,10 @@
 import { barrier, downloading_map, uploading_map } from "./menus";
 import { banner, pause_screen, quit, restart_map} from "./helpers_userInput";
-import { Map, Pathway_type, add_path, add_place, get_name_by_id, make_map} from "./building";
-import {head, tail, is_null } from "./list";
-import { createBuilding, fetchBuilding,  } from "../apiCalls";
+import { Map, Pathway_type, add_path, add_place, get_name_by_id } from "../lib/building";
+import {head, tail } from "../lib/list";
 
 import * as fs from "fs";
 import * as promptsync from "prompt-sync";
-import { use_map } from "../user_input";
 const prompt = promptsync();
 
 type json_path = {
@@ -126,7 +124,7 @@ function JSON_to_map(map: Map, data: json_map): void {
     }
 }
 
-export function download_map(map: Map): boolean {
+export async function download_map(map: Map): Promise<boolean> {
 
     const jsonData = map_to_JSON(map);
 
@@ -175,7 +173,7 @@ export function upload_map(map: Map): void | boolean {
             const new_map: json_map = JSON.parse(JSON_data);
 
             console.log();
-            console.log(banner(uploading_map));
+            banner(uploading_map);
             console.log("MAP UPLOADED!!")
 
             pause_screen();

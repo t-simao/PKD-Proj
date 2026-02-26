@@ -70,11 +70,6 @@ function fetchBuilding(id) {
         });
     });
 }
-/**
- * Cretes a building in the database
- * @param id the building id
- * @returns the created building or null
- */
 function createBuilding(id) {
     return __awaiter(this, void 0, void 0, function () {
         var res, data, e_2;
@@ -82,7 +77,12 @@ function createBuilding(id) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
-                    return [4 /*yield*/, fetch("".concat(api_url, "/create/").concat(id), { method: 'POST' })];
+                    return [4 /*yield*/, fetch("".concat(api_url, "/create/").concat(id), {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        })];
                 case 1:
                     res = _a.sent();
                     if (!res.ok)

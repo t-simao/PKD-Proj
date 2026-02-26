@@ -52,7 +52,7 @@ export const your_map_menu: Menu = { menu: `
     |  B) Add path             |
     |  C) Remove path          |
     |  D) Get Path             |
-    |  E) Download Map         |
+    |  E) Save Map             |
     |  F) Go Back              |
     |  q) Quit                 |
     ============================
@@ -76,7 +76,7 @@ export const pathways_menu: Menu = { menu: `
     options: ["a", "b", "c", "d", "e", "f", "q"]
 };
 
-export const uploading_choices: Menu = { menu: `
+export const cloud_local_choices: Menu = { menu: `
     ===================================
     |           Uploading             |
     |---------------------------------|

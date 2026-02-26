@@ -4,6 +4,7 @@ exports.isNumbers = isNumbers;
 exports.isPathwayType = isPathwayType;
 exports.quit_banner = quit_banner;
 exports.quit = quit;
+exports.enter = enter;
 exports.restart_map = restart_map;
 exports.invalid = invalid;
 exports.contains = contains;
@@ -13,9 +14,9 @@ exports.banner = banner;
 exports.pause_screen = pause_screen;
 var promptSync = require("prompt-sync");
 var prompt = promptSync();
-var building_1 = require("./building");
+var building_1 = require("../lib/building");
 var menus_1 = require("./menus");
-var hashtables_1 = require("./hashtables");
+var hashtables_1 = require("../lib/hashtables");
 function isNumbers(str) {
     return /^\d+$/.test(str);
 }

@@ -44,12 +44,12 @@ exports.main_menu = main_menu;
 exports.reMap = reMap;
 var promptSync = require("prompt-sync");
 var prompt = promptSync();
-var building_1 = require("./lib/building");
-var Dijkstra_Alg_1 = require("./lib/Dijkstra_Alg");
-var menus_1 = require("./lib/menus");
-var read_write_1 = require("./lib/read_write");
-var helpers_userInput_1 = require("./lib/helpers_userInput");
-var list_1 = require("./lib/list");
+var building_1 = require("../lib/building");
+var Dijkstra_Alg_1 = require("../lib/Dijkstra_Alg");
+var menus_1 = require("./menus");
+var read_write_1 = require("./read_write");
+var helpers_userInput_1 = require("./helpers_userInput");
+var list_1 = require("../lib/list");
 var apiCalls_1 = require("./apiCalls");
 var mapID = '';
 var map = (0, building_1.make_map)();
@@ -142,48 +142,76 @@ function user_get_path(map) {
     (0, helpers_userInput_1.pause_screen)();
 }
 function use_map(map) {
-    var running = true;
-    var choice = "";
-    var actions = {
-        a: function () { return user_add_place(map); },
-        b: function () { return user_add_path(map); },
-        c: function () { return user_rev_path(map); },
-        d: function () { return user_get_path(map); },
-        e: function () { return (0, read_write_1.download_map)(map); }
-    };
-    while (running) {
-        choice = (0, helpers_userInput_1.get_user_input)(menus_1.your_map_menu);
-        if ((0, helpers_userInput_1.quit)(choice))
-            return false;
-        if (choice === "e") {
-            if (actions[choice]()) {
-                (0, helpers_userInput_1.pause_screen)();
-                return false;
+    return __awaiter(this, void 0, void 0, function () {
+        var running, choice, actions;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    running = true;
+                    choice = "";
+                    actions = {
+                        a: function () { return user_add_place(map); },
+                        b: function () { return user_add_path(map); },
+                        c: function () { return user_rev_path(map); },
+                        d: function () { return user_get_path(map); },
+                        e: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, save_choice(map)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }
+                    };
+                    _a.label = 1;
+                case 1:
+                    if (!running) return [3 /*break*/, 8];
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.your_map_menu);
+                    if ((0, helpers_userInput_1.quit)(choice))
+                        return [2 /*return*/, false];
+                    if (!(choice === "e")) return [3 /*break*/, 3];
+                    return [4 /*yield*/, actions[choice]()];
+                case 2:
+                    if (_a.sent()) {
+                        (0, helpers_userInput_1.pause_screen)();
+                        return [2 /*return*/, false];
+                    }
+                    (0, helpers_userInput_1.pause_screen)();
+                    return [3 /*break*/, 7];
+                case 3:
+                    if (!(choice === "f")) return [3 /*break*/, 4];
+                    running = false;
+                    return [3 /*break*/, 7];
+                case 4:
+                    if (!(choice !== undefined)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, actions[choice]()];
+                case 5:
+                    _a.sent();
+                    return [3 /*break*/, 7];
+                case 6:
+                    running = false;
+                    _a.label = 7;
+                case 7: return [3 /*break*/, 1];
+                case 8:
+                    console.log(menus_1.barrier);
+                    return [2 /*return*/, true];
             }
-            (0, helpers_userInput_1.pause_screen)();
-        }
-        else if (choice === "f") {
-            running = false;
-        }
-        else if (choice !== undefined) {
-            actions[choice]();
-        }
-        else {
-            running = false;
-        }
-    }
-    console.log(menus_1.barrier);
-    return true;
+        });
+    });
 }
 function upload(map) {
-    var res = (0, read_write_1.upload_map)(map);
-    if (typeof (res) === "boolean")
-        return true;
-    return use_map(map);
-}
-function new_map(map) {
-    (0, helpers_userInput_1.restart_map)(map);
-    return use_map(map);
+    return __awaiter(this, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    res = (0, read_write_1.upload_map)(map);
+                    if (typeof (res) === "boolean")
+                        return [2 /*return*/, true];
+                    return [4 /*yield*/, use_map(map)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
 }
 function upload_choice(map) {
     return __awaiter(this, void 0, void 0, function () {
@@ -202,7 +230,7 @@ function upload_choice(map) {
                             }
                         }); }); }
                     };
-                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.uploading_choices);
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.cloud_local_choices);
                     if (!(choice === "c")) return [3 /*break*/, 1];
                     return [2 /*return*/, false];
                 case 1:
@@ -224,13 +252,18 @@ function main_menu() {
                     running = true;
                     choice = (0, helpers_userInput_1.get_user_input)(menus_1.mainMenu);
                     actions = {
-                        a: function () { return use_map(map); },
+                        a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, createNewBuilding()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
                         b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, upload_choice(map)];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
-                        }); }); }
+                        }); }); },
                     };
                     if (!(actions[choice] !== undefined)) return [3 /*break*/, 7];
                     return [4 /*yield*/, actions[choice]()];
@@ -241,9 +274,24 @@ function main_menu() {
                     if (!running) return [3 /*break*/, 6];
                     choice = (0, helpers_userInput_1.get_user_input)(menus_1.alt_mainMenu);
                     actions_1 = {
-                        a: function () { return new_map(map); },
-                        b: function () { return use_map(map); },
-                        c: function () { return upload(map); }
+                        a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, createNewBuilding()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
+                        b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, use_map(map)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
+                        c: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, upload_choice(map)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
                     };
                     if (!(actions_1[choice] !== undefined)) return [3 /*break*/, 4];
                     return [4 /*yield*/, actions_1[choice]()];
@@ -255,6 +303,43 @@ function main_menu() {
                 case 6: return [3 /*break*/, 8];
                 case 7: return [2 /*return*/];
                 case 8: return [2 /*return*/];
+            }
+        });
+    });
+}
+function save_choice(map) {
+    return __awaiter(this, void 0, void 0, function () {
+        var choice, actions;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    choice = "";
+                    actions = {
+                        a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, (0, read_write_1.download_map)(map)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
+                        b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, saveBuildingChanges(map)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }
+                    };
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.cloud_local_choices);
+                    if (!(choice === "c")) return [3 /*break*/, 1];
+                    return [2 /*return*/, false];
+                case 1:
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, actions[choice]()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3: return [2 /*return*/, false];
+                case 4: return [2 /*return*/, false];
             }
         });
     });
@@ -290,10 +375,11 @@ function fetchTheBuilding() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    user_map = prompt("YOUR MAP: ");
+                    console.log("Enter the name of your map!!");
+                    user_map = prompt("Name: ");
                     if ((0, helpers_userInput_1.quit)(user_map))
                         return [2 /*return*/, true];
-                    console.log("Fetching map '".concat(user_map, "'..."));
+                    console.log("\nFetching map '".concat(user_map, "'..."));
                     return [4 /*yield*/, (0, apiCalls_1.fetchBuilding)(user_map)];
                 case 1:
                     building = _a.sent();
@@ -304,7 +390,7 @@ function fetchTheBuilding() {
                     return [4 /*yield*/, use_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    console.log("Failed to fetch Map");
+                    console.log("\nFailed to fetch the Map, ".concat(user_map, " does not exist"));
                     (0, helpers_userInput_1.pause_screen)();
                     return [2 /*return*/, true];
             }
@@ -335,7 +421,6 @@ function saveBuildingChanges(map) {
                     else {
                         console.log('Failed to save');
                     }
-                    (0, helpers_userInput_1.pause_screen)();
                     return [2 /*return*/];
             }
         });
@@ -351,7 +436,10 @@ function createNewBuilding() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    user_map = prompt("YOUR MAP: ");
+                    console.log("");
+                    console.log(menus_1.barrier);
+                    console.log("Enter the name of your map!!");
+                    user_map = prompt("Name: ");
                     if ((0, helpers_userInput_1.quit)(user_map))
                         return [2 /*return*/, true];
                     console.log("\nCreating new map '".concat(user_map, "'..."));
@@ -359,13 +447,13 @@ function createNewBuilding() {
                 case 1:
                     building = _a.sent();
                     if (!building) return [3 /*break*/, 3];
-                    console.log("Map  created!");
+                    console.log("Map created!");
                     mapID = user_map;
                     map = reMap(building);
                     return [4 /*yield*/, use_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    console.log("\nFailed to create map.");
+                    console.log("\nFailed to create map, Trn a different name!!");
                     (0, helpers_userInput_1.pause_screen)();
                     return [2 /*return*/, true];
             }

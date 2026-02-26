@@ -1,9 +1,9 @@
 import * as promptSync from 'prompt-sync';
 const prompt = promptSync();
 
-import { type Map, type Node, Pathway_type_arr, type Pathway_type,} from './building';
-import { type Menu, barrier} from './menus'
-import { ph_empty, hash_id } from './hashtables';
+import { type Map, type Node, Pathway_type_arr, type Pathway_type,} from '../lib/building';
+import { type Menu, barrier} from './menus';
+import { ph_empty, hash_id } from '../lib/hashtables';
 
 
 export function isNumbers(str: string): boolean {
@@ -26,7 +26,7 @@ export function quit(str: string): boolean {
     return str === "q" ? true : false;
 }
 
-function enter(): void {
+export function enter(): void {
     prompt("Press enter to continue ↵");
 }
 

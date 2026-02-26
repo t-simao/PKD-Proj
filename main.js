@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_input_1 = require("./user_input");
+var user_input_1 = require("./input/user_input");
 function start() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
