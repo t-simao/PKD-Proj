@@ -1,6 +1,6 @@
 import { barrier, downloading_map, uploading_map } from "./menus";
 import { banner, pause_screen, quit, restart_map} from "./helpers_userInput";
-import { Map, Pathway_type, add_path, add_place, get_name_by_id } from "../lib/building";
+import { Map, Pathway_type, add_path, add_place, get_name_by_id, make_map } from "../lib/building";
 import {head, tail } from "../lib/list";
 
 import * as fs from "fs";
@@ -92,9 +92,8 @@ function map_to_JSON(map: Map): string {
     return jsonData;
 }
 
-function JSON_to_map(map: Map, data: json_map): void {
-
-    restart_map(map);
+function JSON_to_map(data: json_map): Map {
+    let map: Map = make_map();
 
     const places = data.Places;
     const count = places.length;
@@ -122,6 +121,7 @@ function JSON_to_map(map: Map, data: json_map): void {
             add_path(map, currPlace, pathType, dst);
         }
     }
+    return map;
 }
 
 export async function download_map(map: Map): Promise<boolean> {
@@ -157,7 +157,7 @@ export async function download_map(map: Map): Promise<boolean> {
     }
 }
 
-export function upload_map(map: Map): void | boolean {
+export function upload_map(): Map | boolean {
 
     while(true) {
 
@@ -178,7 +178,7 @@ export function upload_map(map: Map): void | boolean {
 
             pause_screen();
 
-            return JSON_to_map(map, new_map);
+            return JSON_to_map(new_map);
             
         }
         catch {

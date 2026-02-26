@@ -52,7 +52,7 @@ var helpers_userInput_1 = require("./helpers_userInput");
 var list_1 = require("../lib/list");
 var apiCalls_1 = require("./apiCalls");
 var mapID = '';
-var map = (0, building_1.make_map)();
+var map;
 function user_add_place(map) {
     (0, helpers_userInput_1.banner)(menus_1.adding_place);
     var name = prompt("Name: ");
@@ -157,7 +157,7 @@ function use_map(map) {
                         d: function () { return user_get_path(map); },
                         e: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, save_choice(map)];
+                                case 0: return [4 /*yield*/, save_choice()];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); }
@@ -198,22 +198,24 @@ function use_map(map) {
         });
     });
 }
-function upload(map) {
+function upload() {
     return __awaiter(this, void 0, void 0, function () {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    res = (0, read_write_1.upload_map)(map);
+                    res = (0, read_write_1.upload_map)();
                     if (typeof (res) === "boolean")
                         return [2 /*return*/, true];
+                    map = res;
+                    mapID = '';
                     return [4 /*yield*/, use_map(map)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-function upload_choice(map) {
+function upload_choice() {
     return __awaiter(this, void 0, void 0, function () {
         var choice, actions;
         var _this = this;
@@ -222,7 +224,12 @@ function upload_choice(map) {
                 case 0:
                     choice = "";
                     actions = {
-                        a: function () { return upload(map); },
+                        a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, upload()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); },
                         b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, fetchTheBuilding()];
@@ -244,12 +251,16 @@ function upload_choice(map) {
 }
 function main_menu() {
     return __awaiter(this, void 0, void 0, function () {
-        var running, choice, actions, actions_1;
+        var running, choice, actions, actions;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     running = true;
+                    _a.label = 1;
+                case 1:
+                    if (!running) return [3 /*break*/, 9];
+                    if (!!map) return [3 /*break*/, 5];
                     choice = (0, helpers_userInput_1.get_user_input)(menus_1.mainMenu);
                     actions = {
                         a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -260,20 +271,21 @@ function main_menu() {
                         }); }); },
                         b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, upload_choice(map)];
+                                case 0: return [4 /*yield*/, upload_choice()];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); },
                     };
-                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 7];
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 3];
                     return [4 /*yield*/, actions[choice]()];
-                case 1:
-                    running = _a.sent();
-                    _a.label = 2;
                 case 2:
-                    if (!running) return [3 /*break*/, 6];
+                    running = _a.sent();
+                    return [3 /*break*/, 4];
+                case 3: return [2 /*return*/];
+                case 4: return [3 /*break*/, 8];
+                case 5:
                     choice = (0, helpers_userInput_1.get_user_input)(menus_1.alt_mainMenu);
-                    actions_1 = {
+                    actions = {
                         a: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, createNewBuilding()];
@@ -288,26 +300,24 @@ function main_menu() {
                         }); }); },
                         c: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, upload_choice(map)];
+                                case 0: return [4 /*yield*/, upload_choice()];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); },
                     };
-                    if (!(actions_1[choice] !== undefined)) return [3 /*break*/, 4];
-                    return [4 /*yield*/, actions_1[choice]()];
-                case 3:
+                    if (!(actions[choice] !== undefined)) return [3 /*break*/, 7];
+                    return [4 /*yield*/, actions[choice]()];
+                case 6:
                     running = _a.sent();
-                    return [3 /*break*/, 5];
-                case 4: return [2 /*return*/];
-                case 5: return [3 /*break*/, 2];
-                case 6: return [3 /*break*/, 8];
+                    return [3 /*break*/, 8];
                 case 7: return [2 /*return*/];
-                case 8: return [2 /*return*/];
+                case 8: return [3 /*break*/, 1];
+                case 9: return [2 /*return*/];
             }
         });
     });
 }
-function save_choice(map) {
+function save_choice() {
     return __awaiter(this, void 0, void 0, function () {
         var choice, actions;
         var _this = this;
@@ -324,12 +334,12 @@ function save_choice(map) {
                         }); }); },
                         b: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, saveBuildingChanges(map)];
+                                case 0: return [4 /*yield*/, saveBuildingChanges()];
                                 case 1: return [2 /*return*/, _a.sent()];
                             }
                         }); }); }
                     };
-                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.cloud_local_choices);
+                    choice = (0, helpers_userInput_1.get_user_input)(menus_1.save_choices);
                     if (!(choice === "c")) return [3 /*break*/, 1];
                     return [2 /*return*/, false];
                 case 1:
@@ -402,18 +412,17 @@ function fetchTheBuilding() {
  * @param map the edited map
  * @returns void
  */
-function saveBuildingChanges(map) {
+function saveBuildingChanges() {
     return __awaiter(this, void 0, void 0, function () {
         var save;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!mapID) {
-                        (0, helpers_userInput_1.pause_screen)();
-                        return [2 /*return*/];
-                    }
-                    return [4 /*yield*/, (0, apiCalls_1.saveTheBuilding)(mapID, map)];
-                case 1:
+                    if (!!mapID) return [3 /*break*/, 2];
+                    return [4 /*yield*/, createNewBuilding()];
+                case 1: return [2 /*return*/, _a.sent()];
+                case 2: return [4 /*yield*/, (0, apiCalls_1.saveTheBuilding)(mapID, map)];
+                case 3:
                     save = _a.sent();
                     if (save) {
                         console.log('map saved');
@@ -421,7 +430,7 @@ function saveBuildingChanges(map) {
                     else {
                         console.log('Failed to save');
                     }
-                    return [2 /*return*/];
+                    return [2 /*return*/, true];
             }
         });
     });
@@ -436,24 +445,21 @@ function createNewBuilding() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log("");
-                    console.log(menus_1.barrier);
-                    console.log("Enter the name of your map!!");
-                    user_map = prompt("Name: ");
+                    user_map = prompt("Enter name: ");
                     if ((0, helpers_userInput_1.quit)(user_map))
                         return [2 /*return*/, true];
                     console.log("\nCreating new map '".concat(user_map, "'..."));
-                    return [4 /*yield*/, (0, apiCalls_1.createBuilding)(user_map)];
+                    return [4 /*yield*/, (0, apiCalls_1.createBuilding)(user_map, map)];
                 case 1:
                     building = _a.sent();
                     if (!building) return [3 /*break*/, 3];
-                    console.log("Map created!");
+                    console.log("Map created and saved!");
                     mapID = user_map;
                     map = reMap(building);
                     return [4 /*yield*/, use_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    console.log("\nFailed to create map, Trn a different name!!");
+                    console.log("\nFailed to created map.");
                     (0, helpers_userInput_1.pause_screen)();
                     return [2 /*return*/, true];
             }

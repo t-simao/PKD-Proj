@@ -90,8 +90,8 @@ function map_to_JSON(map) {
     var jsonData = JSON.stringify(res, null, 3);
     return jsonData;
 }
-function JSON_to_map(map, data) {
-    (0, helpers_userInput_1.restart_map)(map);
+function JSON_to_map(data) {
+    var map = (0, building_1.make_map)();
     var places = data.Places;
     var count = places.length;
     for (var i = 0; i < count; i = i + 1) {
@@ -109,6 +109,7 @@ function JSON_to_map(map, data) {
             (0, building_1.add_path)(map, currPlace, pathType, dst);
         }
     }
+    return map;
 }
 function download_map(map) {
     return __awaiter(this, void 0, void 0, function () {
@@ -138,7 +139,7 @@ function download_map(map) {
         });
     });
 }
-function upload_map(map) {
+function upload_map() {
     while (true) {
         console.log();
         (0, helpers_userInput_1.banner)(menus_1.uploading_map);
@@ -153,7 +154,7 @@ function upload_map(map) {
             (0, helpers_userInput_1.banner)(menus_1.uploading_map);
             console.log("MAP UPLOADED!!");
             (0, helpers_userInput_1.pause_screen)();
-            return JSON_to_map(map, new_map);
+            return JSON_to_map(new_map);
         }
         catch (_a) {
             console.log("NO MAP CALLED ".concat(name_2, " WAS FOUND, PLEASE TRY AGAIN!!"));
