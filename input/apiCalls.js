@@ -70,7 +70,12 @@ function fetchBuilding(id) {
         });
     });
 }
-function createBuilding(id) {
+/**
+ * Cretes a building in the database
+ * @param id the building id
+ * @returns the created building or null
+ */
+function createBuilding(id, map) {
     return __awaiter(this, void 0, void 0, function () {
         var res, data, e_2;
         return __generator(this, function (_a) {
@@ -78,10 +83,9 @@ function createBuilding(id) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
                     return [4 /*yield*/, fetch("".concat(api_url, "/create/").concat(id), {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            }
+                            method: 'POST',
+                            headers: { 'Content-Type': 'Application/json' },
+                            body: JSON.stringify({ map: map })
                         })];
                 case 1:
                     res = _a.sent();

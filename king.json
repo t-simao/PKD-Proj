@@ -1,0 +1,19 @@
+{
+   "Places": [
+      {
+         "from": "h",
+         "floor": 2,
+         "paths": []
+      },
+      {
+         "from": "u",
+         "floor": 5,
+         "paths": []
+      },
+      {
+         "from": "g",
+         "floor": 5,
+         "paths": []
+      }
+   ]
+}

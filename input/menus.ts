@@ -89,6 +89,19 @@ export const cloud_local_choices: Menu = { menu: `
     options: ["a", "b", "c", "q"]
 };
 
+export const save_choices: Menu = { menu: `
+    ===================================
+    |          Save/Download          |
+    |---------------------------------|
+    |  A) Download locally            |
+    |  B) Save in the cloud           |
+    |  C) Back                        |
+    |  q) Quit                        |
+    ===================================
+`,
+    options: ["a", "b", "c", "q"]
+};
+
 export const getting_path: string = `
     ============================
     |       Getting Path       |
