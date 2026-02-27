@@ -113,9 +113,9 @@ export function get_name_by_id(map: Map, id: number): string {
 }
 
 /** Given a map, an id and the id of the destination, if a path exists between them, removes that path
- * @param map the map 
- * @param idx represents the id of the node which has the path thats being removed
- * @param dst represents the id of the node which the path being removed leads to
+ * @param {Map} map the map 
+ * @param {number} idx represents the id of the node which has the path thats being removed
+ * @param {number} dst represents the id of the node which the path being removed leads to
  */
 function helper_rev_path(map: Map, idx: number, dst: number): void {
     let allpaths_fromsrc = map.adj[idx];
@@ -137,10 +137,10 @@ function helper_rev_path(map: Map, idx: number, dst: number): void {
 }
 
 /** Given a map, and two nodes checks if there exists a path between them
- * @param map the map 
- * @param from represents the node the path starts from
- * @param dst represents the node the path ends at
- * @returns true if a path between the provided nodes exists and false if it doesn't
+ * @param {Map} map the map 
+ * @param {Node} from represents the node the path starts from
+ * @param {Node} dst represents the node the path ends at
+ * @returns {boolean} true if a path between the provided nodes exists and false if it doesn't
  */
 function path_exist(map: Map, from: Node, to: Node): boolean {
 
@@ -183,8 +183,8 @@ export function check_empty(ids: Array<Node>): number {
 
 /**Provided a map and the name of a place, if the place exists, removes it from the map and all
  * of the paths that lead to that place. It also adds a dummy node in the maps node array
- * @param map the map the place should be removed from
- * @param name the name of the place that should be removed if it exists
+ * @param {Map} map the map the place should be removed from
+ * @param {string} name the name of the place that should be removed if it exists
  */
 export function remove_place(g: Map, name: string): void {
     const y = ph_lookup(g.places, name);
@@ -205,10 +205,10 @@ export function remove_place(g: Map, name: string): void {
 
 /** Makes a Node of the provided name and adds that node to the given map only if it
  * doesn't already exist in the map
- * @param map represents the map the node should be added to
- * @param name represents the name value that the node should have
- * @param floor represents the floor value the node should have
- * @returns 0 if the node was created and added successfully but -1 if the node already
+ * @param {Map} map represents the map the node should be added to
+ * @param {string} name represents the name value that the node should have
+ * @param {number} floor represents the floor value the node should have
+ * @returns {number} 0 if the node was created and added successfully but -1 if the node already
  * exists in the map or if the name value is an empty string
  */
 export function add_place(map: Map, name: string, floor: number): number {
@@ -237,10 +237,10 @@ export function add_place(map: Map, name: string, floor: number): number {
 }
 
 /** Adds a two way path between from and to, only if it doesn't already exists in the map
- * @param map represents the map which the path should the added to
- * @param from represents the name of the node at one of the ends of the path
- * @param to represents the name of the node at the other end of the path
- * @returns 0 if a path going from "from" to "to" and from "to" to "from" is add and -1 if 
+ * @param {Map} map the map which the path should the added to
+ * @param {string} from the name of the node at one of the ends of the path
+ * @param {Pathway_type} type the type of the path being added
+ * @returns {number} 0 if a path going from "from" to "to" and from "to" to "from" is added and -1 if 
  * node: from doesn't exist in the map or node: to doesn't exist in the map and if the path already exists
  * between these two nodes or if from === to
  */
@@ -289,10 +289,10 @@ export function add_path(map: Map, from: string, type: Pathway_type, to: string)
 }
 
 /** Removes a two way path between from and to, only if it already exists in the map
- * @param map represents the map which the path should the added to
- * @param from represents the name of the node at one of the ends of the path
- * @param to represents the name of the node at the other end of the path
- * @returns 0 if a path going from "from" to "to" and from "to" to "from" is removed and -1 if 
+ * @param {Map} map represents the map which the path should the added to
+ * @param {string} from represents the name of the node at one of the ends of the path
+ * @param {string} to represents the name of the node at the other end of the path
+ * @returns {number} 0 if a path going from "from" to "to" and from "to" to "from" is removed and -1 if 
  * node: from doesn't exist in the map or node: to doesn't exist in the map and if the path already exists
  * between these two nodes or if from === to
  */

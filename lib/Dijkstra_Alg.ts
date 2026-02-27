@@ -15,10 +15,10 @@ type Path_Info = {
 /**Calculates the shortest path between source node and the destination node, 
  * potentially avoiding specific Pathway_types
  * 
- * @param map the map contaning both source and destination nodes and their adjacency lists
- * @param srcId the id of the source node  
- * @param dstId the id of the destination node
- * @param to_avoid paths of this type are avoided when calculating the shortest path
+ * @param {Map} map the map contaning both source and destination nodes and their adjacency lists
+ * @param {number} srcId the id of the source node  
+ * @param {number} dstId the id of the destination node
+ * @param {string} to_avoid paths of this type are avoided when calculating the shortest path
  * 
  * @returns An object containing:
  * - parents: An array containing each nodes parent in the shortest path, null for the 
@@ -82,10 +82,10 @@ function dijkstra(map: Map, srcId: number, dstId: number, to_avoid: string): Pat
 /**Calculates the shortest path between two nodes using dijkstra algorithm and if a path exists between them,
  * prints it
  * 
- * @param map the map contaning both source and destination nodes and their adjacency lists
- * @param from the name of the source node
- * @param to the name of the destination node
- * @param to_avoid paths of this type are avoided when calculating the shortest path
+ * @param {Map} map the map contaning both source and destination nodes and their adjacency lists
+ * @param {string} from the name of the source node
+ * @param {string} to the name of the destination node
+ * @param {string} to_avoid paths of this type are avoided when calculating the shortest path
  * 
  * @returns -1 if either source or destination node doesn't exist, if from and to are same and
  * if there doesn't exist a path from source node to destination node, otherwise it returns void and
