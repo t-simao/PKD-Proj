@@ -51,13 +51,14 @@ export const your_map_menu: Menu = { menu: `
     |  A) Add Place            |
     |  B) Add path             |
     |  C) Remove path          |
-    |  D) Get Path             |
-    |  E) Save Map             |
-    |  F) Go Back              |
+    |  D) Delete place         |
+    |  E) Get Path             |
+    |  F) Save Map             |
+    |  G) Go Back              |
     |  q) Quit                 |
     ============================
 `,
-    options: ["a", "b", "c", "d", "e", "f", "q"]
+    options: ["a", "b", "c", "d", "e", "f", "g", "q"]
 };
 
 export const pathways_menu: Menu = { menu: `
@@ -111,6 +112,12 @@ export const getting_path: string = `
 export const adding_place: string = `
     ============================
     |       Adding Place       |
+    ============================
+`;
+
+export const removing_place: string = `
+    ============================
+    |      Removing Place      |
     ============================
 `;
 

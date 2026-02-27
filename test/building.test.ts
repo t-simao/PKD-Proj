@@ -1,4 +1,4 @@
-import {add_path, rev_path, make_map, add_place, Map} from '../lib/building'
+import {add_path, rev_path, make_map, add_place, remove_place} from '../lib/building'
 import { ph_empty, hash_id } from '../lib/hashtables'
 import { list } from '../lib/list';
 import {get_path} from '../lib/Dijkstra_Alg'
@@ -12,7 +12,7 @@ test('Case: Empty map ', () => {
       });
 })
 
-test('Cse: Add place ', () => {
+test('Cse: Add and Remove place', () => {
   let map = make_map()
   const res = add_place(map, 'place_a', 1);
   const res_2 = add_place(map, 'place_a', 1);
@@ -21,9 +21,12 @@ test('Cse: Add place ', () => {
   expect(res).toBe(0)
   expect(res_2).toBe(-1)
   expect(map.size).toBe(2)
+
+  remove_place(map, 'place_b');
+  expect(map.size).toBe(1)
 })
 
-test('Case: Add and Remove place', () => {
+test('Case: Add and Remove path', () => {
   let map = make_map()
   add_place(map, 'place_a', 1)
   add_place(map, 'place_b', 1)
