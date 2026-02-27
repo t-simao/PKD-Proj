@@ -1,0 +1,34 @@
+{
+   "Places": [
+      {
+         "from": "",
+         "floor": -1,
+         "paths": []
+      },
+      {
+         "from": "b",
+         "floor": 1,
+         "paths": [
+            {
+               "to": "c",
+               "type": "stairs"
+            }
+         ]
+      },
+      {
+         "from": "c",
+         "floor": 2,
+         "paths": [
+            {
+               "to": "b",
+               "type": "stairs"
+            }
+         ]
+      },
+      {
+         "from": "d",
+         "floor": 2,
+         "paths": []
+      }
+   ]
+}
