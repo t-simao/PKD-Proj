@@ -291,11 +291,12 @@ export function reMap(map: Map): Map {
     let newMap = make_map();
 
     for (const node of map.nodes) {
+        if (node.name === '') continue;
         add_place(newMap, node.name, node.floor);
     }
 
     let i = 0;
-    while (i < map.size) {
+    while (i < map.nodes.length) {
         const name = map.nodes[i].name
         let li = map.adj[i]
         while(!is_null(li)){
