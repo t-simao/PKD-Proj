@@ -98,7 +98,7 @@ export function get_name(node: Node): string {
 }
 
 //Given a edge returns its path type
-export function get_type(edge: Edge): string {
+export function get_type(edge: Edge): Pathway_type {
 
     return edge.type;
 }
@@ -168,7 +168,7 @@ function remove_it(id: number, li: List<Edge>): List<Edge> {
             : pair(head(li), remove_it(id, tail(li)))
 }
 
-//Checks if there exists a place in the array where there used to be a value but now is empty
+//Checks if there exists a dummy node in the array where there used to be a value but now is empty
 export function check_empty(ids: Array<Node>): number {
     for(let i = 0; i < ids.length; i++) {
         if(ids[i].name === '') {
@@ -181,7 +181,7 @@ export function check_empty(ids: Array<Node>): number {
 // Main functions
 
 /**Provided a map and the name of a place, if the place exists, removes it from the map and all
- * of the paths that lead to that place
+ * of the paths that lead to that place. Itb also adds a dummy node in the maps node array
  * @param map the map the place should be removed from
  * @param name the name of the place that should be removed if it exists
  */
