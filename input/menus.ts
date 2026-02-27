@@ -1,5 +1,5 @@
 export type Menu = {
-    menu: string,
+    menu: string, //the menu
     options: Array<string>
 }
 
