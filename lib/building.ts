@@ -1,5 +1,5 @@
-import { type List, pair, list, tail, head } from './list';
-import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable } from './hashtables'
+import { type List, pair, list, tail, head, is_null } from './list';
+import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable, ph_delete } from './hashtables'
 
 // Data type definitions
 export type Pathway_type = "hallway_S" | "hallway_L" | "elevator" | "ramp" | "stairs" | "hallway_C";
@@ -155,34 +155,63 @@ export function make_map(): Map{
     };
 }
 
+export function check_empty(ids: Array<Node>): number {
+    for(let i = 0; i < ids.length; i++) {
+        if(ids[i].name === '') {
+            return i;
+        }
+    }
+    return -1
+}
+
+function remove_it(id: number, li: List<Edge>): List<Edge> {
+    return is_null(li)
+            ? null
+            : id === head(li).to
+            ? tail(li)
+            : pair(head(li), remove_it(id, tail(li)))
+}
+
+export function remove_place(g: Map, name: string): void {
+    const y = ph_lookup(g.places, name);
+
+    if (y === undefined) return;
+
+    g.adj[y.id] = null;
+    let i = 0;
+    while(i < g.adj.length) {
+        g.adj[i] = remove_it(y.id, g.adj[i])
+        i++;
+    }
+
+    ph_delete(g.places, name);
+    g.nodes[y.id] = { id: y.id, name: '', floor: -1}
+    g.size--
+}
+
 export function add_place(map: Map, name: string, floor: number): number {
 
-    if(get_node_ht(map, name) !== undefined) {
+    if(get_node_ht(map, name) !== undefined) return -1;
 
-        console.log(`A place called ${name} already exists!!`)
-        return -1;
+    const e_spot = check_empty(map.nodes);
 
-    } else if(name === "") { 
-
-        console.log(`Enter A valid name for the place!!`)
-        return -1;
-
-    } else {
+    if (e_spot === -1) {
         const idx = map.size;
-        const key = name;
         const node = make_node(name, floor, idx);
         
-        ph_insert(map.places, key, node);
+        ph_insert(map.places, name, node);
 
         map.adj.push(list());
         map.nodes[idx] = node;
-        map.size = map.size + 1;
-
-        console.log(`${name} was added to floor number ${floor}`)
-        
-        return 0;
+    } else {
+        const node = make_node(name, floor, e_spot)
+        ph_insert(map.places, name, node)
+        map.nodes[e_spot] = node
     }
-    
+
+    map.size = map.size + 1;
+    console.log(`${name} was added to floor number ${floor}`)
+    return 0;
 }
 
 export function add_path(map: Map, from: string, type: Pathway_type, to: string): number {
@@ -266,3 +295,33 @@ export function rev_path(map: Map, from: string, to: string): number {
     }
     
 }
+
+// export function add_place(map: Map, name: string, floor: number): number {
+
+//     if(get_node_ht(map, name) !== undefined) {
+
+//         console.log(`A place called ${name} already exists!!`)
+//         return -1;
+
+//     } else if(name === "") { 
+
+//         console.log(`Enter A valid name for the place!!`)
+//         return -1;
+
+//     } else {
+//         const idx = map.size;
+//         const key = name;
+//         const node = make_node(name, floor, idx);
+        
+//         ph_insert(map.places, key, node);
+
+//         map.adj.push(list());
+//         map.nodes[idx] = node;
+//         map.size = map.size + 1;
+
+//         console.log(`${name} was added to floor number ${floor}`)
+        
+//         return 0;
+//     }
+    
+// }

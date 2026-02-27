@@ -73,6 +73,15 @@ function user_add_place(map) {
     (0, building_1.add_place)(map, name, floor);
     (0, helpers_userInput_1.pause_screen)();
 }
+function user_remove_place(map) {
+    (0, helpers_userInput_1.banner)(menus_1.removing_place);
+    var name = prompt("Name: ");
+    if ((0, helpers_userInput_1.quit)(name))
+        return;
+    console.log();
+    (0, building_1.remove_place)(map, name);
+    (0, helpers_userInput_1.pause_screen)();
+}
 function user_add_path(map) {
     (0, helpers_userInput_1.banner)(menus_1.adding_path);
     var from = prompt("From: ");
@@ -154,8 +163,9 @@ function use_map(map) {
                         a: function () { return user_add_place(map); },
                         b: function () { return user_add_path(map); },
                         c: function () { return user_rev_path(map); },
-                        d: function () { return user_get_path(map); },
-                        e: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        d: function () { return user_remove_place(map); },
+                        e: function () { return user_get_path(map); },
+                        f: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4 /*yield*/, save_choice()];
                                 case 1: return [2 /*return*/, _a.sent()];
@@ -178,7 +188,7 @@ function use_map(map) {
                     (0, helpers_userInput_1.pause_screen)();
                     return [3 /*break*/, 7];
                 case 3:
-                    if (!(choice === "f")) return [3 /*break*/, 4];
+                    if (!(choice === "g")) return [3 /*break*/, 4];
                     running = false;
                     return [3 /*break*/, 7];
                 case 4:

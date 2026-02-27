@@ -1,10 +1,10 @@
 import * as promptSync from 'prompt-sync';
 const prompt = promptSync();
 
-import { add_place, add_path, rev_path, type Map, type Pathway_type, make_map} from '../lib/building';
+import { add_place, add_path, rev_path, type Map, type Pathway_type, make_map, remove_place} from '../lib/building';
 import { get_path } from '../lib/Dijkstra_Alg';
 import { adding_place, adding_path, removing_path, getting_path, mode_menu, your_map_menu, 
-    barrier, mainMenu, pathways_menu, path_banner, alt_mainMenu, cloud_local_choices, save_choices} from './menus'
+    barrier, mainMenu, pathways_menu, path_banner, alt_mainMenu, cloud_local_choices, save_choices, removing_place} from './menus'
 import { download_map, upload_map } from './read_write';
 import { banner, quit, isNumbers, pause_screen, isPathwayType, display_extra_opt_menu, 
     get_user_input, restart_map } from './helpers_userInput';
@@ -39,6 +39,19 @@ function user_add_place(map: Map): void {
 
     console.log();
     add_place(map, name, floor);
+    pause_screen();
+}
+
+function user_remove_place(map: Map): void {
+
+    banner(removing_place);
+
+    const name = prompt("Name: ");
+
+    if(quit(name)) return;
+
+    console.log();
+    remove_place(map, name);
     pause_screen();
 }
 
@@ -141,8 +154,9 @@ export async function use_map(map: Map): Promise<boolean> {
         a: () => user_add_place(map),
         b: () => user_add_path(map),
         c: () => user_rev_path(map),
-        d: () => user_get_path(map),
-        e: async () => await save_choice()
+        d: () => user_remove_place(map),
+        e: () => user_get_path(map),
+        f: async () => await save_choice()
     }
 
     while(running) {
@@ -160,7 +174,7 @@ export async function use_map(map: Map): Promise<boolean> {
 
             pause_screen();
 
-        } else if(choice === "f") {
+        } else if(choice === "g") {
 
             running = false;
 
