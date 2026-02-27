@@ -1,4 +1,4 @@
-import { type List, pair, list, tail, head, is_null } from './list';
+import { type List, pair, list, tail, head, is_null, reverse } from './list';
 import { hash_id, ph_empty, ph_insert, ph_lookup, ProbingHashtable, ph_delete } from './hashtables'
 
 // Data type definitions
@@ -37,7 +37,7 @@ export type Map = {
 
 // Helper functions
 
-//Makes an empty graph which satisfies the Map type
+//Makes an empty map which satisfies the Map type
 export function make_map(): Map{
     return {
         places: ph_empty<string, Node>(15, hash_id),
@@ -47,7 +47,7 @@ export function make_map(): Map{
     };
 }
 
-//Makes a Place containing the provided info
+//Makes a Place containing the provided information and returns it
 function make_node(name: string, floor: number, idx: number): Node {
     return {
         id: idx,
@@ -56,14 +56,14 @@ function make_node(name: string, floor: number, idx: number): Node {
     };
 }
 
-//Makes an edge representing a path between two nodes of the provided Pathway_type
+//Makes an edge representing a path between two nodes of the provided Pathway_type and returns it
 function make_edge(to: Node, type: Pathway_type) {
-    const Weight = Pathway_cost[type]
+    const weight = Pathway_cost[type]
 
     return {
         to: to.id,
         type: type,
-        weight: Weight
+        weight: weight
     }
 }
 
@@ -132,14 +132,15 @@ function helper_rev_path(map: Map, idx: number, dst: number): void {
         allpaths_fromsrc = tail(allpaths_fromsrc);
     }
 
-    map.adj[idx] = temp;
+    const res = reverse(temp);
+    map.adj[idx] = res;
 }
 
 /** Given a map, and two nodes checks if there exists a path between them
  * @param map the map 
  * @param from represents the node the path starts from
  * @param dst represents the node the path ends at
- * @retuns true if a path between the provided nodes exists and false if it doesn't
+ * @returns true if a path between the provided nodes exists and false if it doesn't
  */
 function path_exist(map: Map, from: Node, to: Node): boolean {
 
@@ -181,7 +182,7 @@ export function check_empty(ids: Array<Node>): number {
 // Main functions
 
 /**Provided a map and the name of a place, if the place exists, removes it from the map and all
- * of the paths that lead to that place. Itb also adds a dummy node in the maps node array
+ * of the paths that lead to that place. It also adds a dummy node in the maps node array
  * @param map the map the place should be removed from
  * @param name the name of the place that should be removed if it exists
  */
