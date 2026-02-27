@@ -47,7 +47,7 @@ export function make_map(): Map{
     };
 }
 
-//Makes a Place containg the provided info
+//Makes a Place containing the provided info
 function make_node(name: string, floor: number, idx: number): Node {
     return {
         id: idx,
@@ -56,7 +56,7 @@ function make_node(name: string, floor: number, idx: number): Node {
     };
 }
 
-//Makes an edge representing a path between two nodes of the provided Path_type
+//Makes an edge representing a path between two nodes of the provided Pathway_type
 function make_edge(to: Node, type: Pathway_type) {
     const Weight = Pathway_cost[type]
 
@@ -115,7 +115,7 @@ export function get_name_by_id(map: Map, id: number): string {
 /** Given a map, an id and the id of the destination, if a path exists between them, removes that path
  * @param map the map 
  * @param idx represents the id of the node which has the path thats being removed
- * @param dst represnts the id of the node which the path being removed leads to
+ * @param dst represents the id of the node which the path being removed leads to
  */
 function helper_rev_path(map: Map, idx: number, dst: number): void {
     let allpaths_fromsrc = map.adj[idx];
@@ -159,16 +159,16 @@ function path_exist(map: Map, from: Node, to: Node): boolean {
     return false;
 }
 
-// Main functions
+//Returns a adjacency list with the path removed which leads to the node corresponding to the provided id
+function remove_it(id: number, li: List<Edge>): List<Edge> {
+    return is_null(li)
+            ? null
+            : id === head(li).to
+            ? tail(li)
+            : pair(head(li), remove_it(id, tail(li)))
+}
 
-/** Makes a Node of the provided name and adds that node to the given map only if it
- * doesn't already exist in the map
- * @param map represents the map the node should be added to
- * @param name represents the name value that the node should have
- * @param floor represents the floor value the node should have
- * @returns 0 if the node was created and added successfully but -1 if the node already
- * exists in the map or if the name value is an empty string
- */
+//Checks if there exists a place in the array where there used to be a value but now is empty
 export function check_empty(ids: Array<Node>): number {
     for(let i = 0; i < ids.length; i++) {
         if(ids[i].name === '') {
@@ -178,14 +178,13 @@ export function check_empty(ids: Array<Node>): number {
     return -1
 }
 
-function remove_it(id: number, li: List<Edge>): List<Edge> {
-    return is_null(li)
-            ? null
-            : id === head(li).to
-            ? tail(li)
-            : pair(head(li), remove_it(id, tail(li)))
-}
+// Main functions
 
+/**Provided a map and the name of a place, if the place exists, removes it from the map and all
+ * of the paths that lead to that place
+ * @param map the map the place should be removed from
+ * @param name the name of the place that should be removed if it exists
+ */
 export function remove_place(g: Map, name: string): void {
     const y = ph_lookup(g.places, name);
 
@@ -203,6 +202,14 @@ export function remove_place(g: Map, name: string): void {
     g.size--
 }
 
+/** Makes a Node of the provided name and adds that node to the given map only if it
+ * doesn't already exist in the map
+ * @param map represents the map the node should be added to
+ * @param name represents the name value that the node should have
+ * @param floor represents the floor value the node should have
+ * @returns 0 if the node was created and added successfully but -1 if the node already
+ * exists in the map or if the name value is an empty string
+ */
 export function add_place(map: Map, name: string, floor: number): number {
 
     if(get_node_ht(map, name) !== undefined) return -1;
@@ -228,13 +235,13 @@ export function add_place(map: Map, name: string, floor: number): number {
     return 0;
 }
 
-/** Adds a two way path between from and to, only if it doesn't already exist in the map
+/** Adds a two way path between from and to, only if it doesn't already exists in the map
  * @param map represents the map which the path should the added to
  * @param from represents the name of the node at one of the ends of the path
  * @param to represents the name of the node at the other end of the path
  * @returns 0 if a path going from "from" to "to" and from "to" to "from" is add and -1 if 
  * node: from doesn't exist in the map or node: to doesn't exist in the map and if the path already exists
- * between these two nodes
+ * between these two nodes or if from === to
  */
 export function add_path(map: Map, from: string, type: Pathway_type, to: string): number {
 
@@ -278,9 +285,16 @@ export function add_path(map: Map, from: string, type: Pathway_type, to: string)
         console.log(`A path from ${to} to ${from} has also been added!!`)
         return 0;
     }
-    
 }
 
+/** Removes a two way path between from and to, only if it already exists in the map
+ * @param map represents the map which the path should the added to
+ * @param from represents the name of the node at one of the ends of the path
+ * @param to represents the name of the node at the other end of the path
+ * @returns 0 if a path going from "from" to "to" and from "to" to "from" is removed and -1 if 
+ * node: from doesn't exist in the map or node: to doesn't exist in the map and if the path already exists
+ * between these two nodes or if from === to
+ */
 export function rev_path(map: Map, from: string, to: string): number {
 
     const src = get_node_ht(map, from);
@@ -314,36 +328,5 @@ export function rev_path(map: Map, from: string, to: string): number {
         console.log(`A path from ${from} to ${to} has been removed!!`)
         console.log(`A path from ${to} to ${from} has also been removed!!`)
         return 0;
-    }
-    
+    }   
 }
-
-// export function add_place(map: Map, name: string, floor: number): number {
-
-//     if(get_node_ht(map, name) !== undefined) {
-
-//         console.log(`A place called ${name} already exists!!`)
-//         return -1;
-
-//     } else if(name === "") { 
-
-//         console.log(`Enter A valid name for the place!!`)
-//         return -1;
-
-//     } else {
-//         const idx = map.size;
-//         const key = name;
-//         const node = make_node(name, floor, idx);
-        
-//         ph_insert(map.places, key, node);
-
-//         map.adj.push(list());
-//         map.nodes[idx] = node;
-//         map.size = map.size + 1;
-
-//         console.log(`${name} was added to floor number ${floor}`)
-        
-//         return 0;
-//     }
-    
-// }
