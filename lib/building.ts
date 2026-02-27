@@ -31,7 +31,7 @@ export type Edge = {
 export type Map = {
     places: ProbingHashtable<string, Node>,
     nodes: Array<Node>
-    adj: Array<List<Edge>>, // Lists may not be sorted
+    adj: Array<List<Edge>>,
     size: number
 };
 

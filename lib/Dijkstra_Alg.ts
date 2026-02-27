@@ -11,7 +11,24 @@ type Path_Info = {
     pathTypes: Array<string>,
 }
 
-function dijkstra(map: Map, srcIdx: number, dstIdx: number, to_avoid: string): Path_Info {
+
+/**Calculates the shortest path between source node and the destination node, 
+ * potentially avoiding specific Pathway_types
+ * 
+ * @param map the map contaning both source and destination nodes and their adjacency lists
+ * @param srcId the id of the source node  
+ * @param dstId the id of the destination node
+ * @param to_avoid paths of this type are avoided when calculating the shortest path
+ * 
+ * @returns An object containing:
+ * - parents: An array containing each nodes parent in the shortest path, null for the 
+ * source node and, -1 for every node which is not reachable from the source node. Nodes id corresponds to 
+ * the index its information is stored at
+ * - pathTypes: An array containing the Pathway_type of the path which leads to the node in the
+ * shortest path and, "" for source node and nodes which are not reachable from the source node. Nodes id 
+ * corresponds to the index its information is stored at
+ */
+function dijkstra(map: Map, srcId: number, dstId: number, to_avoid: string): Path_Info {
     const pending: Prio_Queue<number> = empty();
     const distance: Array<number> = build_array(map.size, _ => Infinity);
 
@@ -23,17 +40,17 @@ function dijkstra(map: Map, srcIdx: number, dstIdx: number, to_avoid: string): P
         pathTypes: pathTypes
     };
 
-    distance[srcIdx] = 0;
-    parents[srcIdx] = null;
-    pathTypes[srcIdx] = "";
+    distance[srcId] = 0;
+    parents[srcId] = null;
+    pathTypes[srcId] = "";
 
-    enqueue(0, srcIdx, pending);
+    enqueue(0, srcId, pending);
 
     while(!pq_is_empty(pending)) {
         const current = pq_head(pending); //Idx of the top node
         dequeue(pending);
 
-        if(current === dstIdx) { break;}
+        if(current === dstId) { break;}
 
         let adjList = map.adj[current];
 
@@ -57,20 +74,23 @@ function dijkstra(map: Map, srcIdx: number, dstIdx: number, to_avoid: string): P
             adjList = tail(adjList);
         }
     }
-    //console.log(parent_type);
-    //console.log("___________________-")
+
     return result;
 }
 
-/** MIGHT BE USEFULL: function make_path(map: Map, id: number, path_arr: Array<string>, prt_arr: Array<number | null>): number | null {
 
-    let currPlc = get_name_by_id(map, id);
-    path_arr.push(currPlc);
-
-    return prt_arr[id];
-
-}*/
-
+/**Calculates the shortest path between two nodes using dijkstra algorithm and if a path exists between them,
+ * prints it
+ * 
+ * @param map the map contaning both source and destination nodes and their adjacency lists
+ * @param from the name of the source node
+ * @param to the name of the destination node
+ * @param to_avoid paths of this type are avoided when calculating the shortest path
+ * 
+ * @returns -1 if either source or destination node doesn't exist, if from and to are same and
+ * if there doesn't exist a path from source node to destination node, otherwise it returns void and
+ * prints the path
+ */
 export function get_path(map: Map, from: string, to: string, to_avoid: string = ""): number | void {
     const src = get_node_ht(map, from); //Lookup by string (name)
     const dst = get_node_ht(map, to); //Lookup by string (name)
@@ -91,30 +111,28 @@ export function get_path(map: Map, from: string, to: string, to_avoid: string = 
 
     } else {
 
-        const srcIdx = get_id(src);
-        const dstIdx = get_id(dst);
+        const srcId = get_id(src);
+        const dstId = get_id(dst);
 
-        const pathInfo = dijkstra(map, srcIdx, dstIdx, to_avoid);
+        const pathInfo = dijkstra(map, srcId, dstId, to_avoid);
         const parents = pathInfo.parents;
         const pathTypes = pathInfo.pathTypes;
 
-        //console.log(parents);
-        //console.log(pathTypes);
 
-        if(parents[dstIdx] === -1) {
+        if(parents[dstId] === -1) {
 
             console.log("Path does not exist!!");
             return;
 
         } else {
 
-            let currPlc = get_name_by_id(map, dstIdx);
-            let currType = pathTypes[dstIdx];
+            let currPlc = get_name_by_id(map, dstId);
+            let currType = pathTypes[dstId];
 
             let pathNodes: Array<string> = [currPlc];
             let pathEdges: Array<string> = [currType];
 
-            let parentId = parents[dstIdx];
+            let parentId = parents[dstId];
 
             while(parentId !== null && parentId !== -1) {
 
@@ -128,9 +146,6 @@ export function get_path(map: Map, from: string, to: string, to_avoid: string = 
             }          
             
             const steps = pathEdges.length - 1;
-            //console.log(pathNodes)
-            //console.log(pathEdges)
-            /** for(let i = steps; i >= 0; i = i - 1) { console.log(`${pathNodes[i]} `); } */
 
             for(let i = steps; i > 0; i = i - 1) {
                 if(i !== 1) {
