@@ -14,32 +14,20 @@ export const Pathway_cost: Record<Pathway_type, number> = {
     stairs: 20 
 }
 
+//Represents a Place
 export type Node = {
     id: number;
     name: string
     floor: number;
 };
 
-/**
- * An edge in a weighted graph
- * @invariant The head of the pair is a non-negative weight from one to node to another
- * @invariant The tail of the edge is the destinated node
- */
+//Represents a Path
 export type Edge = {
     to: number, 
     type: Pathway_type, 
     weight: number 
 };
 
-/**
- * A graph in edge lists representation is
- *     an array of lists of target node ids.
- * @param adj the array of
- * @param size the number of nodes
- * @invariant The length of the outer array is size.
- * @invariant Every target node id is a non-negative number less than size.
- * @invariant None of the target node ids appears twice in the same list.
- */
 export type Map = {
     places: ProbingHashtable<string, Node>,
     nodes: Array<Node>
@@ -49,6 +37,17 @@ export type Map = {
 
 // Helper functions
 
+//Makes an empty graph which satisfies the Map type
+export function make_map(): Map{
+    return {
+        places: ph_empty<string, Node>(15, hash_id),
+        nodes: [],
+        adj: [],
+        size: 0
+    };
+}
+
+//Makes a Place containg the provided info
 function make_node(name: string, floor: number, idx: number): Node {
     return {
         id: idx,
@@ -57,6 +56,7 @@ function make_node(name: string, floor: number, idx: number): Node {
     };
 }
 
+//Makes an edge representing a path between two nodes of the provided Path_type
 function make_edge(to: Node, type: Pathway_type) {
     const Weight = Pathway_cost[type]
 
@@ -67,35 +67,43 @@ function make_edge(to: Node, type: Pathway_type) {
     }
 }
 
+//Adds the path adjacency list of the node at index idx
 function helper_add_path(map: Map, idx: number, path: Edge): void {
 
     map.adj[idx] = pair(path, map.adj[idx]);
 }
 
+//Uses the provided string as key and returns the node that corresponds to that key from the hashtable
 export function get_node_ht(map: Map, place: string): Node | undefined {
 
-    return ph_lookup(map.places, place);;
+    return ph_lookup(map.places, place);
 }
 
+//Returns the node that corresponds to the given index from the nodes array in the Map
 export function get_node_arr(map: Map, idx: number): Node {
 
     return map.nodes[idx];
 }
 
+//Given a node returns its id
 export function get_id(node: Node): number {
 
-    return node.id;;
+    return node.id;
 }
 
+//Given a node returns its name
 export function get_name(node: Node): string {
 
     return node.name;
 }
+
+//Given a edge returns its path type
 export function get_type(edge: Edge): string {
 
     return edge.type;
 }
 
+//Given a map and an id, returns the name of the node which corresponds to that id
 export function get_name_by_id(map: Map, id: number): string {
 
     const arr = map.nodes;
@@ -104,8 +112,12 @@ export function get_name_by_id(map: Map, id: number): string {
     return curr_node.name;
 }
 
+/** Given a map, an id and the id of the destination, if a path exists between them, removes that path
+ * @param map the map 
+ * @param idx represents the id of the node which has the path thats being removed
+ * @param dst represnts the id of the node which the path being removed leads to
+ */
 function helper_rev_path(map: Map, idx: number, dst: number): void {
-
     let allpaths_fromsrc = map.adj[idx];
 
     let temp: List<Edge> = null;
@@ -123,6 +135,12 @@ function helper_rev_path(map: Map, idx: number, dst: number): void {
     map.adj[idx] = temp;
 }
 
+/** Given a map, and two nodes checks if there exists a path between them
+ * @param map the map 
+ * @param from represents the node the path starts from
+ * @param dst represents the node the path ends at
+ * @retuns true if a path between the provided nodes exists and false if it doesn't
+ */
 function path_exist(map: Map, from: Node, to: Node): boolean {
 
     const src_idx = get_id(from);
@@ -140,21 +158,17 @@ function path_exist(map: Map, from: Node, to: Node): boolean {
 
     return false;
 }
+
 // Main functions
 
-/**
- * Maken an empty graph which satisfies the Map type
- * @returns a graph which satisfies the Map type
+/** Makes a Node of the provided name and adds that node to the given map only if it
+ * doesn't already exist in the map
+ * @param map represents the map the node should be added to
+ * @param name represents the name value that the node should have
+ * @param floor represents the floor value the node should have
+ * @returns 0 if the node was created and added successfully but -1 if the node already
+ * exists in the map or if the name value is an empty string
  */
-export function make_map(): Map{
-    return {
-        places: ph_empty<string, Node>(15, hash_id),
-        nodes: [],
-        adj: [],
-        size: 0
-    };
-}
-
 export function check_empty(ids: Array<Node>): number {
     for(let i = 0; i < ids.length; i++) {
         if(ids[i].name === '') {
@@ -214,6 +228,14 @@ export function add_place(map: Map, name: string, floor: number): number {
     return 0;
 }
 
+/** Adds a two way path between from and to, only if it doesn't already exist in the map
+ * @param map represents the map which the path should the added to
+ * @param from represents the name of the node at one of the ends of the path
+ * @param to represents the name of the node at the other end of the path
+ * @returns 0 if a path going from "from" to "to" and from "to" to "from" is add and -1 if 
+ * node: from doesn't exist in the map or node: to doesn't exist in the map and if the path already exists
+ * between these two nodes
+ */
 export function add_path(map: Map, from: string, type: Pathway_type, to: string): number {
 
     const src = get_node_ht(map, from);

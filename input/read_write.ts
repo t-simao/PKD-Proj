@@ -1,5 +1,5 @@
 import { barrier, downloading_map, uploading_map } from "./menus";
-import { banner, pause_screen, quit, restart_map} from "./helpers_userInput";
+import { banner, pause_screen, quit} from "./helpers_userInput";
 import { Map, Pathway_type, add_path, add_place, get_name_by_id, make_map } from "../lib/building";
 import {head, tail } from "../lib/list";
 

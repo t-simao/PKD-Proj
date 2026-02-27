@@ -1,0 +1,24 @@
+{
+   "Places": [
+      {
+         "from": "Shu",
+         "floor": 1,
+         "paths": [
+            {
+               "to": "sh",
+               "type": "stairs"
+            }
+         ]
+      },
+      {
+         "from": "sh",
+         "floor": 9999990,
+         "paths": [
+            {
+               "to": "Shu",
+               "type": "stairs"
+            }
+         ]
+      }
+   ]
+}
