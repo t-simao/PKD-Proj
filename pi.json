@@ -1,0 +1,71 @@
+{
+   "Places": [
+      {
+         "from": "a",
+         "floor": 1,
+         "paths": [
+            {
+               "to": "f",
+               "type": "hallway_C"
+            }
+         ]
+      },
+      {
+         "from": "b",
+         "floor": 1,
+         "paths": [
+            {
+               "to": "c",
+               "type": "stairs"
+            }
+         ]
+      },
+      {
+         "from": "c",
+         "floor": 2,
+         "paths": [
+            {
+               "to": "d",
+               "type": "hallway_L"
+            },
+            {
+               "to": "b",
+               "type": "stairs"
+            }
+         ]
+      },
+      {
+         "from": "d",
+         "floor": 2,
+         "paths": [
+            {
+               "to": "f",
+               "type": "elevator"
+            },
+            {
+               "to": "c",
+               "type": "hallway_L"
+            }
+         ]
+      },
+      {
+         "from": "f",
+         "floor": 1,
+         "paths": [
+            {
+               "to": "d",
+               "type": "elevator"
+            },
+            {
+               "to": "a",
+               "type": "hallway_C"
+            }
+         ]
+      },
+      {
+         "from": "",
+         "floor": -1,
+         "paths": []
+      }
+   ]
+}

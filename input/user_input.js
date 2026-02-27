@@ -369,10 +369,12 @@ function reMap(map) {
     var newMap = (0, building_1.make_map)();
     for (var _i = 0, _a = map.nodes; _i < _a.length; _i++) {
         var node = _a[_i];
+        if (node.name === '')
+            continue;
         (0, building_1.add_place)(newMap, node.name, node.floor);
     }
     var i = 0;
-    while (i < map.size) {
+    while (i < map.nodes.length) {
         var name_1 = map.nodes[i].name;
         var li = map.adj[i];
         while (!(0, list_1.is_null)(li)) {
