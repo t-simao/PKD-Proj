@@ -112,7 +112,8 @@ export function get_name_by_id(map: Map, id: number): string {
     return curr_node.name;
 }
 
-/** Given a map, an id and the id of the destination, if a path exists between them, removes that path
+/** 
+ * Given a map, an id and the id of the destination, if a path exists between them, removes that path
  * @param {Map} map the map 
  * @param {number} idx represents the id of the node which has the path thats being removed
  * @param {number} dst represents the id of the node which the path being removed leads to
@@ -136,7 +137,8 @@ function helper_rev_path(map: Map, idx: number, dst: number): void {
     map.adj[idx] = res;
 }
 
-/** Given a map, and two nodes checks if there exists a path between them
+/** 
+ * Given a map, and two nodes checks if there exists a path between them
  * @param {Map} map the map 
  * @param {Node} from represents the node the path starts from
  * @param {Node} dst represents the node the path ends at
@@ -203,7 +205,8 @@ export function remove_place(g: Map, name: string): void {
     g.size--
 }
 
-/** Makes a Node of the provided name and adds that node to the given map only if it
+/** 
+ * Makes a Node of the provided name and adds that node to the given map only if it
  * doesn't already exist in the map
  * @param {Map} map represents the map the node should be added to
  * @param {string} name represents the name value that the node should have
@@ -236,7 +239,8 @@ export function add_place(map: Map, name: string, floor: number): number {
     return 0;
 }
 
-/** Adds a two way path between from and to, only if it doesn't already exists in the map
+/** 
+ * Adds a two way path between from and to, only if it doesn't already exists in the map
  * @param {Map} map the map which the path should the added to
  * @param {string} from the name of the node at one of the ends of the path
  * @param {Pathway_type} type the type of the path being added
@@ -288,7 +292,8 @@ export function add_path(map: Map, from: string, type: Pathway_type, to: string)
     }
 }
 
-/** Removes a two way path between from and to, only if it already exists in the map
+/** 
+ * Removes a two way path between from and to, only if it already exists in the map
  * @param {Map} map represents the map which the path should the added to
  * @param {string} from represents the name of the node at one of the ends of the path
  * @param {string} to represents the name of the node at the other end of the path

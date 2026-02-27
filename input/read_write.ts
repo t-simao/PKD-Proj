@@ -80,7 +80,8 @@ function get_type(paths: Array<json_edge>, idx: number): Pathway_type {
     return paths[idx].type;
 }
 
-/** Given a map of type Map, it remakes the map to an equivalent but simpler formatted map
+/** 
+ * Given a map of type Map, it remakes the map to an equivalent but simpler formatted map
  * and later converts it into a JSON string
  * @param {Map} map the map which will be converted into a JSON string
  * @returns {string} the map converted into a JSON string
@@ -130,7 +131,8 @@ function map_to_JSON(map: Map): string {
     return jsonData;
 }
 
-/** Given a map of type json_map, it remakes the map to an equivalent map which satisfies the Map type
+/** 
+ * Given a map of type json_map, it remakes the map to an equivalent map which satisfies the Map type
  * @param {json_map} data the map which will be converted
  * @returns {Map} the converted map
  */
@@ -166,7 +168,8 @@ function JSON_to_map(data: json_map): Map {
     return map;
 }
 
-/** Prompts the user to enter the name of the file which will be downloaded on their device
+/** 
+ * Prompts the user to enter the name of the file which will be downloaded on their device
  * containing the map provided converting it to a json_map and writen the JSON file 
  * locally using fs.writeFileSync
  * @param {Map} map the map which will be downloaded
@@ -205,7 +208,8 @@ export async function download_map(map: Map): Promise<boolean> {
     }
 }
 
-/** Prompts the user to enter the name of the file, which will be loaded locally using fs.readFileSync 
+/** 
+ * Prompts the user to enter the name of the file, which will be loaded locally using fs.readFileSync 
  * containing a map in json_map type which will be converted to a new equivalent map which satisfies the Map type
  * @returns {Map | boolean} converted map if the file was successfully uploaded, 
  * otherwise false if the user quits

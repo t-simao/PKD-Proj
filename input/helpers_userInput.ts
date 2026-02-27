@@ -42,7 +42,8 @@ export function invalid(): void {
     prompt("PRESS ANY KEY TO TRY AGAIN!!");
 }
 
-/** Checks if an array of strings contains the provided string
+/** 
+ * Checks if an array of strings contains the provided string
  * @param {Array<string>} arr an array of strings which will be checked
  * @param {string} val the string which is being searched
  * @returns {boolean} true if val is found in arr, otherwise returns false
@@ -51,7 +52,8 @@ export function contains(arr: Array<string>, val: string): boolean {
     return arr.includes(val)
 }
 
-/** Displays the provided menu and aks the user for input repeatedly until it 
+/** 
+ * Displays the provided menu and aks the user for input repeatedly until it 
  * retrieves a valid choice from the user corresponding to one of the options provided by the menu
  * @param {Menu} menu containing the string which represents will be displayed and its valid options
  * @returns {string} The choice selected by the user from the menu options
@@ -79,7 +81,8 @@ export function get_user_input(menu: Menu): string {
     return choice;
 }
 
-/** Displays the provided menu without clearing the terminal first 
+/** 
+ * Displays the provided menu without clearing the terminal first 
  * and aks the user for input repeatedly until it retrieves a valid choice 
  * from the user corresponding to one of the options provided by the menu
  * @param {Menu} menu containing the string which represents will be displayed and its valid options

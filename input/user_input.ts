@@ -14,6 +14,11 @@ import { createBuilding, fetchBuilding, saveTheBuilding } from './apiCalls';
 let mapID: string = '';
 let map: Map;
 
+/**
+ * Prompts the user for a name and floor and adds a place with that name and floor number in 
+ * the provided map
+ * @param {Map} map the map which the place will be added to
+ */
 function user_add_place(map: Map): void {
 
     banner(adding_place);
@@ -28,7 +33,7 @@ function user_add_place(map: Map): void {
     while(!isNumbers(floorStr)) {
 
         console.log();
-        console.log("Plase enter a number: ")
+        console.log("Please enter a number: ")
         floorStr = prompt("Floor: ");
 
         if(quit(floorStr)) return;
@@ -42,6 +47,10 @@ function user_add_place(map: Map): void {
     pause_screen();
 }
 
+/**
+ * Prompts the user for a name and if a place with that name exists in the provided map it is removed
+ * @param {Map} map the map which the place will be removed from
+ */
 function user_remove_place(map: Map): void {
 
     banner(removing_place);
@@ -55,6 +64,12 @@ function user_remove_place(map: Map): void {
     pause_screen();
 }
 
+/**
+ * Prompts the user for a source place, a pathway type, and a destination place.
+ * If the user does not quit, the two way path is added to the provided map.
+ *
+ * @param {Map} map The map to modify.
+ */
 export function user_add_path(map: Map): void {
     banner(adding_path);
 
@@ -89,6 +104,12 @@ export function user_add_path(map: Map): void {
     pause_screen();
 }
 
+/**
+ * Prompts the user for a source place and, a destination place.
+ * If the user does not quit, the two way path is removed from the provided map.
+ *
+ * @param {Map} map The map to modify.
+ */
 export function user_rev_path(map: Map): void {
     banner(removing_path);
 
@@ -105,6 +126,11 @@ export function user_rev_path(map: Map): void {
     pause_screen();
 }
 
+/**
+ * Prompts the user for a source place, a destination place and, a mode 
+ * and displays the shortest path between source and destination according to the chosen mode
+ * @param {Map} map the map the path is located in
+ */
 export function user_get_path(map: Map): void {
     banner(getting_path);
 
@@ -145,6 +171,12 @@ export function user_get_path(map: Map): void {
     pause_screen();
 }
 
+/**
+ * Displays a menu and prompts the user for a option that leads to different actions
+ * specified by the displayed menu
+ * @param {Map} map the map which will be used to perform these actions
+ * @returns {boolean} returns false if the user quits, true if the loop ends normally
+ */
 export async function use_map(map: Map): Promise<boolean> {
 
     let running = true;
@@ -192,15 +224,27 @@ export async function use_map(map: Map): Promise<boolean> {
     return true;
 }
 
+/**
+ * Prompts the user to upload a map from a file and, if successful,
+ * sets it as the current map and launches the main map menu loop.
+ *
+ * @returns true if the user quits during upload, and if the use_map menu loop ends normally.  
+ */
 async function upload(): Promise<boolean> { 
     const res = upload_map();
 
     if(typeof(res) === "boolean") return true;
     map = res
-    mapID =''
+    mapID = ''
     return await use_map(map);
 }
 
+/**
+ * Displays a menu and prompts the user for a option that leads to different ways 
+ * to upload a map
+ * @param {Map} map the map which will be used to perform these actions
+ * @returns {boolean} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 async function upload_choice(): Promise<boolean> {
 
     let choice = "";
@@ -226,6 +270,16 @@ async function upload_choice(): Promise<boolean> {
 
 }
 
+/**
+ * Displays the main menu and prompts the user for a option until the user quits
+ * or the menu loop ends.
+ *
+ * If no map is currently loaded, presents the main menu with options to create a new building or upload a map. 
+ * If a map is already loaded, presents an alternative menu with additional actions, like making a 
+ * new map or uploading a new one.
+ *
+ * @returns {Promise<void>} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 export async function main_menu(): Promise<void> {
     let running: boolean = true
     let choice;
@@ -258,6 +312,11 @@ export async function main_menu(): Promise<void> {
     }
 }
 
+/**
+ * Displays a menu and prompts the user for a option that leads to different ways 
+ * to save the map
+ * @returns {boolean} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 async function save_choice(): Promise<boolean> {
 
     let choice = "";
@@ -287,6 +346,13 @@ async function save_choice(): Promise<boolean> {
 
 
 //DATA BASE:
+/**
+ * Creates a new Map that is a clean copy of the provided map. Nodes with empty names are 
+ * ignored, and all paths between valid nodes are preserved in the new map.
+ * @param {Map} map - The original map to be copied and cleaned.
+ * @returns {Map} A new map containing the same nodes and paths as the original,
+ * but without any dummy nodes (nodes with empty names).
+ */
 export function reMap(map: Map): Map {
     let newMap = make_map();
 
@@ -314,7 +380,7 @@ export function reMap(map: Map): Map {
 
 /**
  * takes an id from the user and fetches the building
- * @returns boolean
+ * @returns {boolean}
  */
 async function fetchTheBuilding(): Promise<boolean> {
 
@@ -338,8 +404,7 @@ async function fetchTheBuilding(): Promise<boolean> {
 }
 
 /**
- * If id exixts, takes the edited map and ads it as the map for the id
- * @param map the edited map
+ * If id exists, takes the edited map and adds it as the map for the id
  * @returns void
  */
 async function saveBuildingChanges(): Promise<boolean> {
@@ -357,8 +422,8 @@ async function saveBuildingChanges(): Promise<boolean> {
 
 
 /**
- * Createsa new building in the database
- * @returns boolean
+ * Creates a new building in the database
+ * @returns {boolean}
  */
 async function createNewBuilding(): Promise<boolean> { 
     let user_map = prompt("Enter name: ");
@@ -374,7 +439,7 @@ async function createNewBuilding(): Promise<boolean> {
         return await use_map(map)
     }
 
-    console.log("\nFailed to created map.");
+    console.log("\nFailed to create the map.");
     pause_screen();
     return true;
 }

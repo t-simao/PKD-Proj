@@ -12,7 +12,8 @@ type Path_Info = {
 }
 
 
-/**Calculates the shortest path between source node and the destination node, 
+/**
+ * Calculates the shortest path between source node and the destination node, 
  * potentially avoiding specific Pathway_types
  * 
  * @param {Map} map the map contaning both source and destination nodes and their adjacency lists
@@ -79,7 +80,8 @@ function dijkstra(map: Map, srcId: number, dstId: number, to_avoid: string): Pat
 }
 
 
-/**Calculates the shortest path between two nodes using dijkstra algorithm and if a path exists between them,
+/**
+ * Calculates the shortest path between two nodes using dijkstra algorithm and if a path exists between them,
  * prints it
  * 
  * @param {Map} map the map contaning both source and destination nodes and their adjacency lists
