@@ -379,8 +379,9 @@ export function reMap(map: Map): Map {
 
 
 /**
- * takes an id from the user and fetches the building
- * @returns {boolean}
+ * Prompts the user for a map name and gets the map from the database
+ * Updates the current map and mapID if successful
+ * @returns {Promise<boolean>} Returns true to continue the program
  */
 async function fetchTheBuilding(): Promise<boolean> {
 
@@ -404,8 +405,8 @@ async function fetchTheBuilding(): Promise<boolean> {
 }
 
 /**
- * If id exists, takes the edited map and adds it as the map for the id
- * @returns void
+ * Saves the current map under its ID. If ID doesn't exist, creates a new map instead
+ * @returns {Promise<boolean>} Returns true to continue the program 
  */
 async function saveBuildingChanges(): Promise<boolean> {
     if (!mapID) {
@@ -422,8 +423,8 @@ async function saveBuildingChanges(): Promise<boolean> {
 
 
 /**
- * Creates a new building in the database
- * @returns {boolean}
+ * Prompts the user for a new map name and creates a new map in the database
+ * @returns {Promise<boolean>} Returns true to continue the program
  */
 async function createNewBuilding(): Promise<boolean> { 
     let user_map = prompt("Enter name: ");

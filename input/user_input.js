@@ -53,6 +53,11 @@ var list_1 = require("../lib/list");
 var apiCalls_1 = require("./apiCalls");
 var mapID = '';
 var map;
+/**
+ * Prompts the user for a name and floor and adds a place with that name and floor number in
+ * the provided map
+ * @param {Map} map the map which the place will be added to
+ */
 function user_add_place(map) {
     (0, helpers_userInput_1.banner)(menus_1.adding_place);
     var name = prompt("Name: ");
@@ -63,7 +68,7 @@ function user_add_place(map) {
         return;
     while (!(0, helpers_userInput_1.isNumbers)(floorStr)) {
         console.log();
-        console.log("Plase enter a number: ");
+        console.log("Please enter a number: ");
         floorStr = prompt("Floor: ");
         if ((0, helpers_userInput_1.quit)(floorStr))
             return;
@@ -73,6 +78,10 @@ function user_add_place(map) {
     (0, building_1.add_place)(map, name, floor);
     (0, helpers_userInput_1.pause_screen)();
 }
+/**
+ * Prompts the user for a name and if a place with that name exists in the provided map it is removed
+ * @param {Map} map the map which the place will be removed from
+ */
 function user_remove_place(map) {
     (0, helpers_userInput_1.banner)(menus_1.removing_place);
     var name = prompt("Name: ");
@@ -82,6 +91,12 @@ function user_remove_place(map) {
     (0, building_1.remove_place)(map, name);
     (0, helpers_userInput_1.pause_screen)();
 }
+/**
+ * Prompts the user for a source place, a pathway type, and a destination place.
+ * If the user does not quit, the two way path is added to the provided map.
+ *
+ * @param {Map} map The map to modify.
+ */
 function user_add_path(map) {
     (0, helpers_userInput_1.banner)(menus_1.adding_path);
     var from = prompt("From: ");
@@ -108,6 +123,12 @@ function user_add_path(map) {
     }
     (0, helpers_userInput_1.pause_screen)();
 }
+/**
+ * Prompts the user for a source place and, a destination place.
+ * If the user does not quit, the two way path is removed from the provided map.
+ *
+ * @param {Map} map The map to modify.
+ */
 function user_rev_path(map) {
     (0, helpers_userInput_1.banner)(menus_1.removing_path);
     var from = prompt("From: ");
@@ -121,6 +142,11 @@ function user_rev_path(map) {
     (0, building_1.rev_path)(map, from, to);
     (0, helpers_userInput_1.pause_screen)();
 }
+/**
+ * Prompts the user for a source place, a destination place and, a mode
+ * and displays the shortest path between source and destination according to the chosen mode
+ * @param {Map} map the map the path is located in
+ */
 function user_get_path(map) {
     (0, helpers_userInput_1.banner)(menus_1.getting_path);
     var from = prompt("From: ");
@@ -150,6 +176,12 @@ function user_get_path(map) {
     }
     (0, helpers_userInput_1.pause_screen)();
 }
+/**
+ * Displays a menu and prompts the user for a option that leads to different actions
+ * specified by the displayed menu
+ * @param {Map} map the map which will be used to perform these actions
+ * @returns {boolean} returns false if the user quits, true if the loop ends normally
+ */
 function use_map(map) {
     return __awaiter(this, void 0, void 0, function () {
         var running, choice, actions;
@@ -208,6 +240,12 @@ function use_map(map) {
         });
     });
 }
+/**
+ * Prompts the user to upload a map from a file and, if successful,
+ * sets it as the current map and launches the main map menu loop.
+ *
+ * @returns true if the user quits during upload, and if the use_map menu loop ends normally.
+ */
 function upload() {
     return __awaiter(this, void 0, void 0, function () {
         var res;
@@ -225,6 +263,12 @@ function upload() {
         });
     });
 }
+/**
+ * Displays a menu and prompts the user for a option that leads to different ways
+ * to upload a map
+ * @param {Map} map the map which will be used to perform these actions
+ * @returns {boolean} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 function upload_choice() {
     return __awaiter(this, void 0, void 0, function () {
         var choice, actions;
@@ -259,6 +303,16 @@ function upload_choice() {
         });
     });
 }
+/**
+ * Displays the main menu and prompts the user for a option until the user quits
+ * or the menu loop ends.
+ *
+ * If no map is currently loaded, presents the main menu with options to create a new building or upload a map.
+ * If a map is already loaded, presents an alternative menu with additional actions, like making a
+ * new map or uploading a new one.
+ *
+ * @returns {Promise<void>} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 function main_menu() {
     return __awaiter(this, void 0, void 0, function () {
         var running, choice, actions, actions;
@@ -327,6 +381,11 @@ function main_menu() {
         });
     });
 }
+/**
+ * Displays a menu and prompts the user for a option that leads to different ways
+ * to save the map
+ * @returns {boolean} returns false if the user quits or selects option "c", true if the action ends normally
+ */
 function save_choice() {
     return __awaiter(this, void 0, void 0, function () {
         var choice, actions;
@@ -365,6 +424,13 @@ function save_choice() {
     });
 }
 //DATA BASE:
+/**
+ * Creates a new Map that is a clean copy of the provided map. Nodes with empty names are
+ * ignored, and all paths between valid nodes are preserved in the new map.
+ * @param {Map} map - The original map to be copied and cleaned.
+ * @returns {Map} A new map containing the same nodes and paths as the original,
+ * but without any dummy nodes (nodes with empty names).
+ */
 function reMap(map) {
     var newMap = (0, building_1.make_map)();
     for (var _i = 0, _a = map.nodes; _i < _a.length; _i++) {
@@ -389,7 +455,7 @@ function reMap(map) {
 }
 /**
  * takes an id from the user and fetches the building
- * @returns boolean
+ * @returns {boolean}
  */
 function fetchTheBuilding() {
     return __awaiter(this, void 0, void 0, function () {
@@ -420,8 +486,7 @@ function fetchTheBuilding() {
     });
 }
 /**
- * If id exixts, takes the edited map and ads it as the map for the id
- * @param map the edited map
+ * If id exists, takes the edited map and adds it as the map for the id
  * @returns void
  */
 function saveBuildingChanges() {
@@ -448,8 +513,8 @@ function saveBuildingChanges() {
     });
 }
 /**
- * Createsa new building in the database
- * @returns boolean
+ * Creates a new building in the database
+ * @returns {boolean}
  */
 function createNewBuilding() {
     return __awaiter(this, void 0, void 0, function () {
@@ -471,7 +536,7 @@ function createNewBuilding() {
                     return [4 /*yield*/, use_map(map)];
                 case 2: return [2 /*return*/, _a.sent()];
                 case 3:
-                    console.log("\nFailed to created map.");
+                    console.log("\nFailed to create the map.");
                     (0, helpers_userInput_1.pause_screen)();
                     return [2 /*return*/, true];
             }

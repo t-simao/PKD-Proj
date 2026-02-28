@@ -45,21 +45,58 @@ var list_1 = require("../lib/list");
 var fs = require("fs");
 var promptsync = require("prompt-sync");
 var prompt = promptsync();
+/**
+ * Gets the name of the place stored at the provided index
+ * @param {Array<json_node>} places the array which contains the json_node
+ * @param {number} idx the index of the desired json_node
+ * @returns {string} the name of the place which is stored in places at the idx'th index
+ */
 function get_place(places, idx) {
     return places[idx].from;
 }
+/**
+ * Gets the floor of the place stored at the provided index
+ * @param {Array<json_node>} places the array which contains the json_node
+ * @param {number} idx the index of the desired json_node
+ * @returns {number} the floor of the place which is stored in places at the idx'th index
+ */
 function get_floor(places, idx) {
     return places[idx].floor;
 }
+/**
+ * Gets the paths array of the node stored at the provided index
+ * @param {Array<json_node>} places the array which contains the json_node
+ * @param {number} idx the index of the desired json_node
+ * @returns {Array<json_edge>} array containing json_edges which represents
+ * places which can be the reached directly from the desired json_node
+ */
 function get_paths(places, idx) {
     return places[idx].paths;
 }
+/**
+ * Gets the to value of the json_edge stored at the provided index of json_edges
+ * @param {Array<json_edge>} paths the array which contains the json_edges
+ * @param {number} idx the index of the desired json_edge
+ * @returns {string} the name of the destination place which is stored at the idx'th index
+ */
 function get_dst(paths, idx) {
     return paths[idx].to;
 }
+/**
+ * Gets the type value of the json_edge stored at the provided index of json_edges
+ * @param {Array<json_edge>} paths the array which contains the json_edges
+ * @param {number} idx the index of the desired json_edge
+ * @returns {string} the Pathway_type of the json_edge stored at the idx'th index
+ */
 function get_type(paths, idx) {
     return paths[idx].type;
 }
+/**
+ * Given a map of type Map, it remakes the map to an equivalent but simpler formatted map
+ * and later converts it into a JSON string
+ * @param {Map} map the map which will be converted into a JSON string
+ * @returns {string} the map converted into a JSON string
+ */
 function map_to_JSON(map) {
     var nodes = map.nodes;
     var res = {
@@ -78,11 +115,11 @@ function map_to_JSON(map) {
             var pathDst_id = currPath.to;
             var pathDst_name = (0, building_1.get_name_by_id)(map, pathDst_id);
             var path__type = currPath.type;
-            var json_path = {
+            var json_edge = {
                 to: pathDst_name,
                 type: path__type
             };
-            curr_node_info.paths.push(json_path);
+            curr_node_info.paths.push(json_edge);
             currNode_adj = (0, list_1.tail)(currNode_adj);
         }
         res.Places.push(curr_node_info);
@@ -90,6 +127,11 @@ function map_to_JSON(map) {
     var jsonData = JSON.stringify(res, null, 3);
     return jsonData;
 }
+/**
+ * Given a map of type json_map, it remakes the map to an equivalent map which satisfies the Map type
+ * @param {json_map} data the map which will be converted
+ * @returns {Map} the converted map
+ */
 function JSON_to_map(data) {
     var map = (0, building_1.make_map)();
     var places = data.Places;
@@ -111,6 +153,13 @@ function JSON_to_map(data) {
     }
     return map;
 }
+/**
+ * Prompts the user to enter the name of the file which will be downloaded on their device
+ * containing the map provided converting it to a json_map and writen the JSON file
+ * locally using fs.writeFileSync
+ * @param {Map} map the map which will be downloaded
+ * @returns {false} if the user quits or after a successful download
+ */
 function download_map(map) {
     return __awaiter(this, void 0, void 0, function () {
         var jsonData, name_1;
@@ -139,6 +188,12 @@ function download_map(map) {
         });
     });
 }
+/**
+ * Prompts the user to enter the name of the file, which will be loaded locally using fs.readFileSync
+ * containing a map in json_map type which will be converted to a new equivalent map which satisfies the Map type
+ * @returns {Map | boolean} converted map if the file was successfully uploaded,
+ * otherwise false if the user quits
+ */
 function upload_map() {
     while (true) {
         console.log();
