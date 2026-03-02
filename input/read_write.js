@@ -36,6 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.map_to_JSON = map_to_JSON;
+exports.JSON_to_map = JSON_to_map;
 exports.download_map = download_map;
 exports.upload_map = upload_map;
 var menus_1 = require("./menus");

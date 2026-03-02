@@ -86,7 +86,7 @@ function get_type(paths: Array<json_edge>, idx: number): Pathway_type {
  * @param {Map} map the map which will be converted into a JSON string
  * @returns {string} the map converted into a JSON string
  */
-function map_to_JSON(map: Map): string {
+export function map_to_JSON(map: Map): string {
 
     const nodes = map.nodes;
 
@@ -136,7 +136,7 @@ function map_to_JSON(map: Map): string {
  * @param {json_map} data the map which will be converted
  * @returns {Map} the converted map
  */
-function JSON_to_map(data: json_map): Map {
+export function JSON_to_map(data: json_map): Map {
     let map: Map = make_map();
 
     const places = data.Places;
